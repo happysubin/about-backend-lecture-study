@@ -7,9 +7,17 @@ import hello.hello.world.spring.repository.MemoryMemberRepository;
 
 import java.util.Optional;
 
+//커맨드 쉬프트 T 를 누르면 테스트 코드를 편하게 작성가능
 public class MemberService {
     //MemberRepository는 인터페이스 앞 인터페이스를 implements 한 MemoryMemberRepository는 클래스이다.
-    private final MemberRepository memberRepository=new MemoryMemberRepository();
+    //테스트 코드 수행시 구현된 파일과 테스트 코드 파일에서 동일한 DB를 공유해야하기 때문에 수정!
+    //두파일에서 new 연산자를 쓰면 아예 동떨어진게 되어버린다.
+    private final MemberRepository memberRepository;
+
+    public MemberService(MemberRepository memberRepository){
+        this.memberRepository=memberRepository;
+        //멤버서비스 입장에서 외부에서 멤버 리포지토리 값을 넣어준다. 이런걸을 Dependency injection (DI) 라고 한다.
+    }
 
     //회원가입
     public Long join(Member member){
