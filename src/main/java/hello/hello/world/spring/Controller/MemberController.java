@@ -5,8 +5,10 @@ import hello.hello.world.spring.Service.MemberService;
 import hello.hello.world.spring.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import java.util.List;
 
 @Controller //이 키워드를 보고 스프링이 아 내가 관리해야하는구나 라고 판단
 public class MemberController {
@@ -31,9 +33,21 @@ public class MemberController {
         Member member=new Member(); //멤버 생성
         member.setName(form.getName()); // 스프링이 설정한 이름을 가져와서 멤버의 이름으로한다
 
-        System.out.print(member);
         memberService.join(member); //가입
+        List<Member> members=memberService.findMembers();
+        for(Member data: members){
+            System.out.println(data.getID()+data.getName());
+        }
 
         return "redirect:/";
     }
+
+    @GetMapping("/members")
+    public String list(Model model){
+        List<Member> members=memberService.findMembers();
+
+        model.addAttribute("members",members);
+        return "members/memberList";
+    }
+
 }
