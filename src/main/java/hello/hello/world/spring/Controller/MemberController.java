@@ -10,7 +10,7 @@ public class MemberController {
     private final MemberService memberService;
     //new 로 많은 객체를 생성하지말고 하나 멤버 서비스 객체로 사용한다.
 
-    @Autowired
+    @Autowired //쉽게 이해하면 연결해주는 역할
     public MemberController(MemberService memberService){
         this.memberService=memberService;
     }
