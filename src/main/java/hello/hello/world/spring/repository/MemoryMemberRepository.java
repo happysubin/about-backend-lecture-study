@@ -3,10 +3,12 @@ package hello.hello.world.spring.repository;
 
 import hello.hello.world.spring.domain.Member;
 import hello.hello.world.spring.repository.MemberRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 //implements 는 interface 상속시 쓰이는 키워드다.
+@Repository //레포지토리 키워드를 보고 스프링 컨테이너에 등록
 public class MemoryMemberRepository implements MemberRepository {
     private static Map<Long,Member> store=new HashMap<>();
     private static long sequence=0L;//키 값 생성
