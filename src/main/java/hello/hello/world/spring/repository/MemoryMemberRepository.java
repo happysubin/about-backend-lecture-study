@@ -16,8 +16,8 @@ public class MemoryMemberRepository implements MemberRepository {
     @Override //오버라이딩: 상속받은 메서드의 내용을 변경하는 것
     public Member save(Member member) { //객체를 인자로 받는다
         member.setId(++sequence);//전위 연산자. 객체에 아이디를 설정
-        store.put(member.getID(),member); //아이디를 가져와서 그 객체와 함꼐 저장
-        System.out.println(member.getID());
+        store.put(member.getId(),member); //아이디를 가져와서 그 객체와 함꼐 저장
+        System.out.println(member.getId());
         return member; //멤버를 리턴
     }
 

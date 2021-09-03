@@ -4,7 +4,7 @@ public class Member {
     private Long id;
     private String name;
 
-    public Long getID(){
+    public Long getId(){
         return id;
     }
     public void setId(Long id){

@@ -36,7 +36,7 @@ public class MemberController {
         memberService.join(member); //가입
         List<Member> members=memberService.findMembers();
         for(Member data: members){
-            System.out.println(data.getID()+data.getName());
+            System.out.println(data.getId()+data.getName());
         }
 
         return "redirect:/";

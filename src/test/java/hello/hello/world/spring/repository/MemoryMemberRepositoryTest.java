@@ -27,7 +27,7 @@ import java.util.Optional;
    member.setName("Spring");
 
    repository.save(member);
-   Member result=repository.findById(member.getID()).get();
+   Member result=repository.findById(member.getId()).get();
    //optional에서 값을 꺼낼 때는 get이라는 메소드를 이용! 좋은 방법은 아님 테스트 코드에서 이용
    System.out.println("result = "+(result == member));
    //result = true 라고 출력된다. 이 방법도 좋지만 Assertions라는 기능이 있다.

@@ -36,7 +36,7 @@ public class MemberService {
         //Optional이라 이 로직이 동작함.
         validateDuplicateMember(member); //중복회원 검증 통과하면 바로 가입
         memberRepository.save(member);
-        return member.getID();
+        return member.getId();
     }
     private void validateDuplicateMember(Member member){
         //위 논리도 좋지만 깔끔하게 정리
