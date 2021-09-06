@@ -6,11 +6,13 @@ import hello.hello.world.spring.repository.MemberRepository;
 import hello.hello.world.spring.repository.MemoryMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 //커맨드 쉬프트 T 를 누르면 테스트 코드를 편하게 작성가능
 //@Service //이 키워드를 보고 스프링컨테이너에 멤버 서비스를 등록
+@Transactional //데이터를저장하고 관리할 때 필요
 public class MemberService {
     //MemberRepository는 인터페이스 앞 인터페이스를 implements 한 MemoryMemberRepository는 클래스이다.
     //테스트 코드 수행시 구현된 파일과 테스트 코드 파일에서 동일한 DB를 공유해야하기 때문에 수정!

@@ -1,14 +1,12 @@
 package hello.hello.world.spring;
 
 import hello.hello.world.spring.Service.MemberService;
-import hello.hello.world.spring.repository.JdbcMemberRepository;
-import hello.hello.world.spring.repository.JdbcTemplateMemberRepository;
-import hello.hello.world.spring.repository.MemberRepository;
-import hello.hello.world.spring.repository.MemoryMemberRepository;
+import hello.hello.world.spring.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import javax.swing.*;
 
@@ -16,12 +14,14 @@ import javax.swing.*;
 public class SpringConfig {
 
     private DataSource dataSource;
+    private final EntityManager em;
 
     //스프링이 우리가 설정한  application.properties를 보고 (DI) 생성자에 주입을 해준다.
     //스프링이 자체적으로도 빈 생성
     @Autowired
-    public SpringConfig(DataSource dataSource){
+    public SpringConfig(DataSource dataSource,EntityManager em){
         this.dataSource=dataSource;
+        this.em=em;
     }
 
     @Bean //이거는 스프링 빈에 등록하라는 거라고 인식함. 멤버 서비스를 호출해서 스프링 빈에 등록
@@ -33,7 +33,8 @@ public class SpringConfig {
     public MemberRepository memberRepository(){
 
         //return new JdbcMemberRepository(dataSource);
-        return new JdbcTemplateMemberRepository(dataSource);
+        //return new JdbcTemplateMemberRepository(dataSource);
+        return new JpaMemberRepository(em);
     }
 }
 

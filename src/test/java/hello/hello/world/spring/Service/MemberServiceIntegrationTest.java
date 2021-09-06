@@ -47,7 +47,7 @@ class MemberServiceIntegrationTest {
 
         //given 주어졌을때
         Member member=new Member();
-        member.setName("hello");
+        member.setName("spring3");
 
         //when  이걸 실행했을 때
         Long saveId=memberService.join(member);
