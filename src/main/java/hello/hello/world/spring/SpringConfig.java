@@ -2,6 +2,7 @@ package hello.hello.world.spring;
 
 import hello.hello.world.spring.Service.MemberService;
 import hello.hello.world.spring.repository.JdbcMemberRepository;
+import hello.hello.world.spring.repository.JdbcTemplateMemberRepository;
 import hello.hello.world.spring.repository.MemberRepository;
 import hello.hello.world.spring.repository.MemoryMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,9 @@ public class SpringConfig {
     }
     @Bean //얘도 스프링 빈에 올라감
     public MemberRepository memberRepository(){
-        return new JdbcMemberRepository(dataSource);
+
+        //return new JdbcMemberRepository(dataSource);
+        return new JdbcTemplateMemberRepository(dataSource);
     }
 }
 
