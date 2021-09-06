@@ -28,6 +28,7 @@ class MemberServiceTest {
         memberRepository.clearStore(); //이러면 각각의 메소드가 끝나면 매번 실행된다.
     }
 
+    @Test
     void join() {
 
         //given 주어졌을때

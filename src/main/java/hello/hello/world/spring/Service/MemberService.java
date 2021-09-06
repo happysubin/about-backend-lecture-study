@@ -19,6 +19,7 @@ public class MemberService {
     //두파일에서 new 연산자를 쓰면 아예 동떨어진게 되어버린다.
     private final MemberRepository memberRepository;
 
+
     //@Autowired
     public MemberService(MemberRepository memberRepository){
         this.memberRepository=memberRepository;
@@ -30,15 +31,22 @@ public class MemberService {
     //회원가입
     public Long join(Member member){
         //같은 이름 중복회원은 가입 불가
+        long start=System.currentTimeMillis();
         /*
         Optional<Member> result=memberRepository.findByName(member.getName());
         result.ifPresent(m->{throw new IllegalStateException("이미 존재하는 회원입니다");});//값이 있다면
         */
         //result.orElseGet() 많이 쓴다 값이 있으면 꺼내고 없으면 어떤 메소드를 실행.
         //Optional이라 이 로직이 동작함.
-        validateDuplicateMember(member); //중복회원 검증 통과하면 바로 가입
-        memberRepository.save(member);
-        return member.getId();
+        try{
+            validateDuplicateMember(member); //중복회원 검증 통과하면 바로 가입
+            memberRepository.save(member);
+            return member.getId();
+        }finally {
+            long finish=System.currentTimeMillis();
+            long timeMs=finish-start;
+            System.out.println("join = "+timeMs);
+        }
     }
     private void validateDuplicateMember(Member member){
         //위 논리도 좋지만 깔끔하게 정리
