@@ -1,5 +1,7 @@
 package spring.core;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import spring.core.discount.DiscountPolicy;
 import spring.core.discount.FixDiscountPolicy;
 import spring.core.discount.RateDiscountPolicy;
@@ -10,19 +12,24 @@ import spring.core.member.MemoryMemberRepository;
 import spring.core.order.OrderService;
 import spring.core.order.OrderServiceImpl;
 
+@Configuration // 애플리케이션 구성, 설정 정보. 이러한 설정정보에 @Configuration 이라 적는다.
 public class AppConfig {
+
+    @Bean //Bean 을 적으면 스프링 컨테이너에 등록이 된다.
     public MemberService memberService(){
         return new MemberServiceImpl(memberRepository());
     }
-
-    private MemberRepository memberRepository() {
+    @Bean
+    public MemberRepository memberRepository() {
         return new MemoryMemberRepository();
     }
 
+    @Bean
     public OrderService orderService(){
         return new OrderServiceImpl(discountPolicy(),memberRepository());
     }
-    
+
+    @Bean
     public DiscountPolicy discountPolicy(){
         return new RateDiscountPolicy();
     }
