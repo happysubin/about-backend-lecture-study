@@ -24,7 +24,7 @@ public class AppConfig {
     }
     
     public DiscountPolicy discountPolicy(){
-        return new FixDiscountPolicy();
+        return new RateDiscountPolicy();
     }
 }
 
@@ -34,3 +34,7 @@ public class AppConfig {
 //MemoryRepository 중복 제거
 //리팩토링 시 큰 장점. 역할이 잘 드러난다. 메소드 명을 보면 역할 파악!
 //나중에 memberRepository를 바꾸면 저 코드만 바꾸면 된다. 수정에 용이
+
+
+//AppConfig 로 코드가 사용 영역과 구성영역으로 나뉜다.
+//사용 영역의 어떤 코드도 변경할 필요가 없다. 구성 영역(AppConfig)만 조금 수정!
