@@ -15,12 +15,12 @@ public class OrderServiceTest {
 
     @Test
     void createOrder(){
-        long memeberId=1L;
-        Member member=new Member(memeberId,"memberA", Grade.VIP);
+        long memberId=1L;
+        Member member=new Member(memberId,"memberA", Grade.VIP);
 
         memberService.join(member);
 
-        Order order=orderService.createOrder(memeberId,"itemA",10000);
+        Order order=orderService.createOrder(memberId,"itemA",10000);
         Assertions.assertThat(order.calculatePrice()).isEqualTo(9000);
         Assertions.assertThat(order.getDiscountPrice()).isEqualTo(1000);
     }
