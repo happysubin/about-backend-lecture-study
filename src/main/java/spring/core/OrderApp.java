@@ -16,10 +16,15 @@ public class OrderApp {
 //        MemberService memberService= appConfig.memberService();
 //        OrderService orderService= appConfig.orderService();
 
+        //스프링 컨테이너 생성
         ApplicationContext applicationContext=new AnnotationConfigApplicationContext(AppConfig.class);
-
+        //ApplicationContext는 인터페이스 AnnotationConfigApplicationContext는 인터페이스의 구현체
+        
         MemberService memberService=applicationContext.getBean("memberService",MemberService.class);
         OrderService orderService=applicationContext.getBean("orderService",OrderService.class);
+        //String 이름 만으로는 반환 값이 뭐가 나올지 잘 모른다. 그럼 Object 최상위 클래스로 캐스팅을 해야한다.
+        //그러나 String 이름과 반환 클래스타입을 명확히 알려주면 요청한 클래스 타입을 그대로 반환해준다.
+
         long memberId=1L;
         Member member=new Member(1L,"memberA", Grade.VIP);
         memberService.join(member);
