@@ -17,15 +17,23 @@ public class AppConfig {
 
     @Bean //Bean 을 적으면 스프링 컨테이너에 등록이 된다.
     public MemberService memberService(){
+
+        //1번
+        System.out.println("call AppConfig.memberService");
         return new MemberServiceImpl(memberRepository());
     }
     @Bean
     public MemberRepository memberRepository() {
+
+        //2번 3번?
+        System.out.println("call AppConfig.memberRepository");
         return new MemoryMemberRepository();
     }
 
     @Bean
     public OrderService orderService(){
+        //1번
+        System.out.println("call AppConfig.orderService");
         return new OrderServiceImpl(discountPolicy(),memberRepository());
     }
 
@@ -45,3 +53,15 @@ public class AppConfig {
 
 //AppConfig 로 코드가 사용 영역과 구성영역으로 나뉜다.
 //사용 영역의 어떤 코드도 변경할 필요가 없다. 구성 영역(AppConfig)만 조금 수정!
+
+
+// ConfigurationSingletonTest를 돌리면 놀랍게도 MemberRepository 는 1번만 호출된다. 아래가 출력 결과다
+/**스프링 컨테이너가 각각 @Bean을 호출해서 스프링 빈을 생성한다. 그래서 memberRepository() 는
+ 다음과 같이 총 3번이 호출되어야 하는 것 아닐까?
+ *
+ * call AppConfig.memberService
+ * call AppConfig.memberRepository
+ * call AppConfig.orderService
+ *
+ *
+ */
