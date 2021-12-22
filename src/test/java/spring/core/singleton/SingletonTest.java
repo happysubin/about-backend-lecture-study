@@ -22,7 +22,22 @@ public class SingletonTest {
 
         Assertions.assertThat(memberService1).isNotSameAs(memberService2); //둘이 달라야 한다.
     }
+
+    @Test
+    @DisplayName("싱글톤 패턴을 적용한 객체 사용")
+    void singletonServiceTest(){
+        SingletonService instance1= SingletonService.getInstance();
+        SingletonService instance2 = SingletonService.getInstance();
+        System.out.println("instance1 = " + instance1);
+        System.out.println("instance2 = " + instance2);
+        Assertions.assertThat(instance1).isSameAs(instance2); //싱글톤 패턴으로 둘이 같아야 한다.
+
+        //private으로 new 키워드를 막아두었다.
+        // 호출할 때 마다 같은 객체 인스턴스를 반환하는 것을 확인할 수 있다.
+    }
 }
+
+
 
 /**
  * 우리가 만들었던 스프링 없는 순수한 DI 컨테이너인 AppConfig는 요청을 할 때 마다 객체를 새로 생성한다.
