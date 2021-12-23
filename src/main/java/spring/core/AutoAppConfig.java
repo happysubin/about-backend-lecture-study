@@ -1,8 +1,11 @@
 package spring.core;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import spring.core.member.MemberRepository;
+import spring.core.member.MemoryMemberRepository;
 
 @Configuration
 @ComponentScan(
@@ -18,5 +21,9 @@ import org.springframework.context.annotation.FilterType;
 //실무에서는 안이러는데 우리는 우리 실습 예제를 위해 한 것! (예제 코드를 안 지우기 위해)
 public class AutoAppConfig {
 
+    @Bean(name="memoryMemberRepository") //수동 빈 등록으로 자동 빈 등록 이름과 충돌이 발생
+    public MemberRepository memberRepository() {
+        return new MemoryMemberRepository();
+    }
 
 }
