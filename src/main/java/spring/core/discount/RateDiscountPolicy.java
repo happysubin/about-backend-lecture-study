@@ -7,7 +7,7 @@ import spring.core.annotation.MainDiscountPolicy;
 import spring.core.member.Grade;
 import spring.core.member.Member;
 
-//@Primary //이건 동일한 타입들 중에서 이것이 우선된다는 소리.
+@Primary //이건 동일한 타입들 중에서 이것이 우선된다는 소리.
 @Component
 @MainDiscountPolicy
 public class RateDiscountPolicy implements DiscountPolicy {
