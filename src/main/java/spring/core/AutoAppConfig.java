@@ -20,10 +20,10 @@ import spring.core.member.MemoryMemberRepository;
 // Configuration 내부를 보면 @Component라는 애노테이션이 붙어 있다. 이로 인해 자동으로 등록되니 이를 예방
 //실무에서는 안이러는데 우리는 우리 실습 예제를 위해 한 것! (예제 코드를 안 지우기 위해)
 public class AutoAppConfig {
-
+/*
     @Bean(name="memoryMemberRepository") //수동 빈 등록으로 자동 빈 등록 이름과 충돌이 발생
     public MemberRepository memberRepository() {
         return new MemoryMemberRepository();
     }
-
+*/
 }
