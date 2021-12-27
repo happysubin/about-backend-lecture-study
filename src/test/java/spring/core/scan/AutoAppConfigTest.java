@@ -47,3 +47,13 @@ public class AutoAppConfigTest {
  *  최근 스프링 부트에서는 수동 빈 등록과 자동 빈 등록이 충돌나면 오류가 발생하도록 기본 값을
  * 바꾸었다. 스프링 부트인 CoreApplication 을 실행해보면 오류를 볼 수 있다
  */
+
+
+/**
+ *
+ * @Autowired 는 타입으로 검색해서 DI를 한다.
+ * 그런데 FixDiscountPolicy, RateDiscountPolicy를 둘다 Component로 적용하면 충돌이 발생
+ * 이유는 DiscountPolicy로 찾는데 이들은 이 클래스의 서브 클래스이기 때문이다.
+ * 그래서 오류가 터진다. NoUniqueBeanDefinitionException 오류가 발생. 하위 타입은 유연성이 떨어지므로 절대 그러면 안돼
+ * 역할에 의존하지. 구현에 의존하면 안된다.!!!!
+ */

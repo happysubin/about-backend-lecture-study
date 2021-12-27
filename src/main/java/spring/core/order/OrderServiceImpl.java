@@ -2,6 +2,7 @@ package spring.core.order;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import spring.core.discount.DiscountPolicy;
 import spring.core.discount.FixDiscountPolicy;
@@ -12,20 +13,21 @@ import spring.core.member.MemoryMemberRepository;
 
 
 @Component
-@RequiredArgsConstructor //final 이 붙은 필드를 모아 자동으로 생성자를 만들어준다 ctrl f12로 생성자가 만들어진것을 확인 가능
+//@RequiredArgsConstructor //final 이 붙은 필드를 모아 자동으로 생성자를 만들어준다 ctrl f12로 생성자가 만들어진것을 확인 가능
 public class OrderServiceImpl implements OrderService{
 
     private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy;
 
     //롬복은 정말 많이 사용한다.
-/*
-    @Autowired //여러 의존관계도 한번에 주입 가능
-    public OrderServiceImpl(DiscountPolicy discountPolicy,MemberRepository memberRepository) {
-        this.discountPolicy = discountPolicy;
+
+    @Autowired //여러 의존관계도 한번에 주입 가능 //Qualifier는 추가 구분자임. 오로지 찾는 용도.
+    public OrderServiceImpl(@Qualifier("mainDiscountPolicy") DiscountPolicy rateDiscountPolicy, MemberRepository memberRepository) {
+        this.discountPolicy = rateDiscountPolicy; //@Autowired 는 타입 명으로 검색하고, 이를 실패하면 필드명으로도 검색한다.
+        //// rate로 필드명을 바꿨으니 이것을 가져온다.
         this.memberRepository=memberRepository;
     }
-*/
+
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
         Member member=memberRepository.findById(memberId);
