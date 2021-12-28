@@ -3,7 +3,7 @@ package spring.core.lifecycle;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
-public class NetworkClient implements InitializingBean, DisposableBean {
+public class NetworkClient {
     private String url;
 
     public NetworkClient() {
@@ -29,29 +29,36 @@ public class NetworkClient implements InitializingBean, DisposableBean {
         System.out.println("close = " + url);
     }
 
-    @Override// 의존관계 주입이 끝나면  이 메소드가 호출 InitializingBean 은 afterPropertiesSet() 메서드로 초기화를 지원한다
-    public void afterPropertiesSet() throws Exception {
-        //프로퍼티 셋팅이 끝나면 -> 의존 관계 주입이 끝나면 호출한다는 뜻의 이름
-        System.out.println("NetworkClient.afterPropertiesSet");
+
+    public void init() {
+        System.out.println("NetworkClient.init");
         connect();
         call("초가화 연결 메시지");
-        //그러므로 이것을 옮긴다.
     }
 
-    @Override //DisposableBean 은 destroy() 메서드로 소멸을 지원한다.
-    public void destroy() throws Exception {
+    public void close() {
+        System.out.println("NetworkClient.close");
         disconnect();
-    }
 
+    }
 }
 
-
 /**
- * 초기화, 소멸 인터페이스 단점
- * 이 인터페이스는 스프링 전용 인터페이스다. 해당 코드가 스프링 전용 인터페이스에 의존한다.
- * 초기화, 소멸 메서드의 이름을 변경할 수 없다.
- * 내가 코드를 고칠 수 없는 외부 라이브러리에 적용할 수 없다.
  *
- * > 참고: 인터페이스를 사용하는 초기화, 종료 방법은 스프링 초창기에 나온 방법들이고, 지금은 다음의 더
- * 나은 방법들이 있어서 거의 사용하지 않는다.
+ * 설정 정보 사용 특징
+ * 메서드 이름을 자유롭게 줄 수 있다.
+ * 스프링 빈이 스프링 코드에 의존하지 않는다.
+ * 코드가 아니라 설정 정보를 사용하기 때문에 코드를 고칠 수 없는 외부 라이브러리에도 초기화, 종료
+ * 메서드를 적용할 수 있다.
+ *
+ * 종료 메서드 추론
+ * @Bean의 destroyMethod 속성에는 아주 특별한 기능이 있다.
+ * 라이브러리는 대부분 close , shutdown 이라는 이름의 종료 메서드를 사용한다.
+ * @Bean의 destroyMethod 는 기본값이 (inferred) (추론)으로 등록되어 있다.
+ * 이 추론 기능은 close , shutdown 라는 이름의 메서드를 자동으로 호출해준다. 이름 그대로 종료
+ * 메서드를 추론해서 호출해준다.
+ * 따라서 직접 스프링 빈으로 등록하면 종료 메서드는 따로 적어주지 않아도 잘 동작한다.
+ * 추론 기능을 사용하기 싫으면 destroyMethod="" 처럼 빈 공백을 지정하면 된다.
  */
+
+
