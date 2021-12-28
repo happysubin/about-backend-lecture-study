@@ -19,7 +19,8 @@ public class BeanLifeCycleTest {
     static class LifeCycleConfig{
 
         //설정 정보에 @Bean(initMethod = "init", destroyMethod = "close") 처럼 초기화, 소멸 메서드를 지정할 수 있다
-        @Bean(initMethod = "init", destroyMethod = "close")
+        //@Bean(initMethod = "init", destroyMethod = "close")
+        @Bean
         public NetworkClient networkClient(){
             //객체를 생성하고 이후에 값을 넣는 경우
             NetworkClient networkClient=new NetworkClient();
