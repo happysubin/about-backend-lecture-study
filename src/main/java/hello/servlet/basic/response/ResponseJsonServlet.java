@@ -27,3 +27,6 @@ public class ResponseJsonServlet extends HttpServlet {
         res.getWriter().write(result);
     }
 }
+
+//Jackson 라이브러리가 제공하는 objectMapper.writeValueAsString() 를 사용하면 객체를 JSON
+//문자로 변경할 수 있다.
