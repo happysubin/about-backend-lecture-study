@@ -1,4 +1,4 @@
-package hello.servlet.web.springmvc.v1;
+package hello.servlet.web.springmvc.v2;
 
 import hello.servlet.domain.member.Member;
 import hello.servlet.domain.member.MemberRepository;
@@ -8,14 +8,22 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
 
 @Controller
-public class SpringMemberSaveControllerV1 {
+@RequestMapping("/springmvc/v2/members")
+public class SpringMemberControllerV2 {
 
     private MemberRepository memberRepository = MemberRepository.getInstance();
 
-    @RequestMapping(value ="/springmvc/v1/members/save")
-    public ModelAndView process(HttpServletRequest req, HttpServletResponse res){
+    @RequestMapping("/new-form") ///springmvc/v2/members/new-form 으로 됨
+    public ModelAndView newForm(){
+        return new ModelAndView("new-form");
+    }
+
+    @RequestMapping(value ="/save")///springmvc/v2/members/save 으로 됨
+    public ModelAndView save(HttpServletRequest req, HttpServletResponse res){
         String username=req.getParameter("username");
         int age = Integer.parseInt(req.getParameter("age"));
         Member member = new Member(username, age);
@@ -23,6 +31,14 @@ public class SpringMemberSaveControllerV1 {
         memberRepository.save(member);
         ModelAndView mv = new ModelAndView("save-result");
         mv.addObject("member", member);
+        return mv;
+    }
+
+    @RequestMapping ///springmvc/v2/members 으로 됨
+    public ModelAndView members(){
+        List<Member> members = memberRepository.findAll();
+        ModelAndView mv = new ModelAndView("members");
+        mv.addObject("members", members);
         return mv;
     }
 }
