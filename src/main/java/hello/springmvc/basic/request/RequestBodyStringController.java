@@ -102,7 +102,7 @@ public class RequestBodyStringController {
      * - HttpMessageConverter 사용 -> StringHttpMessageConverter 적용
      */
     @ResponseBody
-    @PostMapping("/request-body-string-v4")
+    @PostMapping("/request-body-string-v4") //이걸 제일 많이 씀
     public String requestBodyStringV4(@RequestBody String messageBody) {
         log.info("messageBody={}", messageBody);
         return "ok";
