@@ -1,7 +1,9 @@
 package hello.springmvc.basic.request;
 
+import hello.springmvc.basic.HelloData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -111,4 +113,45 @@ public class RequestParamController {
      파라미터의 값이 1개가 확실하다면 Map 을 사용해도 되지만, 그렇지 않다면 MultiValueMap 을 사용하자.
      *
      */
+
+
+   /* @ModelAttribute 사용
+    * 참고: model.addAttribute(helloData) 코드도 함께 자동 적용됨
+    */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@ModelAttribute HelloData helloData){
+        log.info("username={},age={}",helloData.getUsername(),helloData.getAge());
+        log.info("helloData={}",helloData);
+        return "ok";
+    }
+    //modelAttribute를 사용하면 객체도 생성하고, 요청 파라미터의 값도 모두 들어가있다.
+    /**
+     * HelloData 객체를 생성한다.
+     * 요청 파라미터의 이름으로 HelloData 객체의 프로퍼티를 찾는다. 그리고 해당 프로퍼티의 setter를
+     * 호출해서 파라미터의 값을 입력(바인딩) 한다. username과 age
+     * 예) 파라미터 이름이 username 이면 setUsername() 메서드를 찾아서 호출하면서 값을 입력한다.
+     */
+
+    /**
+     * @ModelAttribute 생략 가능 (짱이네...)
+     * String, int 같은 단순 타입 = @RequestParam
+     * argument resolver 로 지정해둔 타입 외 = @ModelAttribute
+     */
+
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+    public String modelAttributeV2(HelloData helloData){
+        log.info("username={}, age={}", helloData.getUsername(),
+                helloData.getAge());
+        return "ok";
+        /**
+         * @ModelAttribute 는 생략할 수 있다.
+         * 그런데 @RequestParam 도 생략할 수 있으니 혼란이 발생할 수 있다.
+         * 스프링은 해당 생략시 다음과 같은 규칙을 적용한다.
+         * String , int , Integer 같은 단순 타입 = @RequestParam
+         * 나머지 = @ModelAttribute
+         * (argument resolver 로 지정해둔 타입 외)
+         */
+    }
 }
