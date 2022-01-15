@@ -144,7 +144,7 @@ public class ValidationItemControllerV2 {
     //실패시에도 사용자의 오류 메시지를 정상 출력할 수 있다.
 
 
-    @PostMapping("/add")
+    //@PostMapping("/add")
     public String addItemV3(@ModelAttribute Item item,BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
 
         if(!StringUtils.hasText(item.getItemName())){
@@ -154,7 +154,7 @@ public class ValidationItemControllerV2 {
 
         if (item.getPrice() == null || item.getPrice() < 1000 || item.getPrice() >
                 1000000) {
-            bindingResult.addError(new FieldError("item", "price", item.getPrice(),
+            bindingResult.addError(new FieldError(bindingResult.getObjectName(), "price", item.getPrice(),
                     false, new String[]{"range.item.price"}, new Object[]{1000,1000000},null));
         }
         if (item.getQuantity() == null || item.getQuantity() > 10000) {
@@ -175,6 +175,8 @@ public class ValidationItemControllerV2 {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
+            log.info("objectName={}", bindingResult.getObjectName()); //우리의경우 item
+            log.info("target={}", bindingResult.getTarget()); //진짜 객체를 넣는다
             return "validation/v2/addForm";
         }
 
@@ -184,6 +186,68 @@ public class ValidationItemControllerV2 {
         redirectAttributes.addAttribute("status", true);
         return "redirect:/validation/v2/items/{itemId}";
     }
+
+    @PostMapping("/add")
+    public String addItemV4(@ModelAttribute Item item,BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
+
+        if(!StringUtils.hasText(item.getItemName())){
+            //bindingResult.addError(new FieldError("item", "itemName",
+                   // item.getItemName(), false, new String[]{"required.item.itemName"}, null, null));
+
+            bindingResult.rejectValue("itemName","required");
+            //필드의 이름과 에러코드 첫글자만 넣으면 된다. 이게 무슨일?
+            //오류 메시지가 정상 출력된다. 그런데 errors.properties 에 있는 코드를 직접 입력하지 않았는데
+            //어떻게 된 것일까? 결론적으로는 얘가 V3에서 한 일, 즉 에러를 생성해준다.
+        }
+
+        if (item.getPrice() == null || item.getPrice() < 1000 || item.getPrice() >
+                1000000) {
+           // bindingResult.addError(new FieldError(bindingResult.getObjectName(), "price", item.getPrice(),
+                    //false, new String[]{"range.item.price"}, new Object[]{1000,1000000},null));
+            bindingResult.rejectValue("price","range",new Object[]{1000,1000000},null);
+        }
+
+        /**
+         * field : 오류 필드명
+         * errorCode : 오류 코드(이 오류 코드는 메시지에 등록된 코드가 아니다. 뒤에서 설명할
+         * messageResolver를 위한 오류 코드이다.)
+         * errorArgs : 오류 메시지에서 {0} 을 치환하기 위한 값
+         * defaultMessage : 오류 메시지를 찾을 수 없을 때 사용하는 기본 메시지
+         */
+
+        if (item.getQuantity() == null || item.getQuantity() > 10000) {
+           // bindingResult.addError(new FieldError("item", "quantity",
+             //       item.getQuantity(), false, new String[]{"max.item.quantity"}, new Object[]{9999},null));
+            bindingResult.rejectValue("quantity","max",new Object[]{9999},null);
+        }
+
+        //특정 필드 예외가 아닌 전체 예외
+        if (item.getPrice() != null && item.getQuantity() != null) {
+            int resultPrice = item.getPrice() * item.getQuantity();
+            if (resultPrice < 10000) {
+                //bindingResult.addError(new ObjectError("item", new String[]{"totalPriceMin"}, new Object[]{10000,resultPrice}, null));
+                bindingResult.reject("totalPriceMin",new Object[]{10000,resultPrice}, null);
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            log.info("objectName={}", bindingResult.getObjectName()); //우리의경우 item
+            log.info("target={}", bindingResult.getTarget()); //진짜 객체를 넣는다
+            return "validation/v2/addForm";
+        }
+
+        //성공로직
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/validation/v2/items/{itemId}";
+    }
+    //BindingResult 가 제공하는 rejectValue() , reject() 를 사용하면 FieldError , ObjectError 를
+    //직접 생성하지 않고, 깔끔하게 검증 오류를 다룰 수 있다. 리젝트는 오브젝트 리젝트밸류는 필드
+
+
+
 
     @GetMapping("/{itemId}/edit")
     public String editForm(@PathVariable Long itemId, Model model) {
