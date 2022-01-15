@@ -42,6 +42,6 @@ public class ItemValidator implements Validator {
     }
 }
 
-//ItemValidator 를 스프링 빈으로 주입 받아서 직접 호출했다. 
+//ItemValidator 를 스프링 빈으로 주입 받아서 직접 호출했다.
 //supports() {} : 해당 검증기를 지원하는 여부 확인(뒤에서 설명)
 //validate(Object target, Errors errors) : 검증 대상 객체와 BindingResult
