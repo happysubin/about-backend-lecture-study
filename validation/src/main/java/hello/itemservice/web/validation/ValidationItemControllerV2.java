@@ -200,6 +200,9 @@ public class ValidationItemControllerV2 {
             //어떻게 된 것일까? 결론적으로는 얘가 V3에서 한 일, 즉 에러를 생성해준다.
         }
 
+        //ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "itemName","required");
+        //이렇게 ValidationUtils 사용도 가능 위와 동일
+
         if (item.getPrice() == null || item.getPrice() < 1000 || item.getPrice() >
                 1000000) {
            // bindingResult.addError(new FieldError(bindingResult.getObjectName(), "price", item.getPrice(),
@@ -246,6 +249,14 @@ public class ValidationItemControllerV2 {
     //BindingResult 가 제공하는 rejectValue() , reject() 를 사용하면 FieldError , ObjectError 를
     //직접 생성하지 않고, 깔끔하게 검증 오류를 다룰 수 있다. 리젝트는 오브젝트 리젝트밸류는 필드
 
+    /**
+     *
+     * 정리
+     * 1. rejectValue() 호출
+     * 2. MessageCodesResolver 를 사용해서 검증 오류 코드로 메시지 코드들을 생성
+     * 3. new FieldError() 를 생성하면서 메시지 코드들을 보관
+     * 4. th:errors 에서 메시지 코드들로 메시지를 순서대로 메시지에서 찾고, 노출
+     */
 
 
 
@@ -281,3 +292,4 @@ public class ValidationItemControllerV2 {
  * Item item , 바로 다음에 BindingResult 가 와야 한다.
  * BindingResult 는 Model에 자동으로 포함된다
  */
+
