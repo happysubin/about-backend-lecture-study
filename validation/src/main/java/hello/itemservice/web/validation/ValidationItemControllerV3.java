@@ -49,6 +49,19 @@ public class ValidationItemControllerV3 {
     @PostMapping("/add")
     public String addItem(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes){
 
+        //그런데 실제 사용해보면 제약이 많고 복잡하다. 그리고 실무에서는 검증 기능이 해당 객체의 범위를
+        //넘어서는 경우들도 종종 등장하는데, 그런 경우 대응이 어렵다.
+        //따라서 오브젝트 오류(글로벌 오류)의 경우 @ScriptAssert 을 억지로 사용하는 것 보다는 다음과 같이
+        //오브젝트 오류 관련 부분만 직접 자바 코드로 작성하는 것을 권장한다.
+
+        if (item.getPrice() != null && item.getQuantity() != null) {
+            int resultPrice = item.getPrice() * item.getQuantity();
+            if (resultPrice < 10000) {
+                bindingResult.reject("totalPriceMin", new Object[]{10000,
+                        resultPrice}, null);
+            }
+        }
+
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             log.info("objectName={}", bindingResult.getObjectName()); //우리의경우 item
