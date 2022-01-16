@@ -12,7 +12,7 @@ public class Item {
 
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "상품이름은 반드시 적어야합니다.")
     private String itemName;
 
     @NotNull
