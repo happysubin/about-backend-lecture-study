@@ -25,12 +25,6 @@ import java.util.List;
 public class ValidationItemControllerV3 {
 
     private final ItemRepository itemRepository;
-    private final ItemValidator itemValidator;
-
-    @InitBinder
-    public void init(WebDataBinder dataBinder){
-        dataBinder.addValidators(itemValidator);
-    }
 
     @GetMapping
     public String items(Model model) {
@@ -52,132 +46,8 @@ public class ValidationItemControllerV3 {
         return "validation/v3/addForm";
     }
 
-    //@PostMapping("/add")
-    public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
-        //bindingResult에는  Item에 바인딩이 된 결과가 담긴다. 이게 이전에 errors역할을 해준다.
-        //Map<String,String> errors= new HashMap<>();
-        //BindingResult는 모델 애트리뷰트 바로 이후에 작성되어야한다.
-
-        //검증 로직
-        if(!StringUtils.hasText(item.getItemName())){ //아이템 이름에 글자가 없다면
-            bindingResult.addError(new FieldError("item","itemName","상품 이름은 필수입니다"));
-            //필드 단위의 에러는 이 객쳉에 적는다. 오브젝트명(모델에 담기는 이름), 필드명 이름, 메시지
-        }
-
-        if(item.getPrice()==null||item.getPrice()<1000||item.getPrice()>1000000){
-           bindingResult.addError(new FieldError("item","price","가격은 1,000 ~ 1,000,000 까지 허용합니다"));
-        }
-
-        if(item.getQuantity()==null|| item.getQuantity()>=9999) {
-            bindingResult.addError(new FieldError("item","quantity","수량은 최대 9,999 까지 허용합니다."));
-        }
-
-        //특정 필드가 아닌 복합 룰 검증.
-        if(item.getPrice()!=null||item.getQuantity()!=null){
-            int resultPrice=item.getPrice()*item.getQuantity();
-            if(resultPrice<10000){
-                bindingResult.addError(new ObjectError("item",
-                        "\"가격 * 수량의 합은 10,000원 이상이어야 합니다. " + "현재 값 = \" + resultPrice"));
-            }
-        }
-
-        //검증에 실패하면 다시 입력 폼으로
-        if(bindingResult.hasErrors()){
-            log.info("errors = {}",bindingResult);
-            //model.addAttribute("errors", errors);
-            //모델에 담을 필요가 없다. bindingResult는 자동으로 뷰에 같이 넘어간다.
-            return "validation/v3/addForm";
-        }
-
-        //성공로직
-        Item savedItem = itemRepository.save(item);
-        redirectAttributes.addAttribute("itemId", savedItem.getId());
-        redirectAttributes.addAttribute("status", true);
-        return "redirect:/validation/v3/items/{itemId}";
-    }
-
-    //@PostMapping("/add")
-    public String addItemv3(@ModelAttribute Item item,BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
-
-        if(!StringUtils.hasText(item.getItemName())){
-            bindingResult.addError(new FieldError("item", "itemName",
-                    item.getItemName(), false, null, null, "상품 이름은 필수입니다."));
-            //여기서 rejectedValue 가 바로 오류 발생시 사용자 입력 값을 저장하는 필드다.
-        }
-
-        /** FieldError 매개변수들들
-        * objectName : 오류가 발생한 객체 이름
-         * field : 오류 필드
-         * rejectedValue : 사용자가 입력한 값(거절된 값)
-         * bindingFailure : 타입 오류 같은 바인딩 실패인지, 검증 실패인지 구분 값 (데이터는 일단 잘 들어와서 우리는 false)
-         * codes : 메시지 코드
-         * arguments : 메시지에서 사용하는 인자
-         * defaultMessage : 기본 오류 메시지
-         */
-
-        if (item.getPrice() == null || item.getPrice() < 1000 || item.getPrice() >
-                1000000) {
-            bindingResult.addError(new FieldError("item", "price", item.getPrice(),
-                    false, null, null, "가격은 1,000 ~ 1,000,000 까지 허용합니다."));
-        }
-        if (item.getQuantity() == null || item.getQuantity() > 10000) {
-            bindingResult.addError(new FieldError("item", "quantity",
-                    item.getQuantity(), false, null, null, "수량은 최대 9,999 까지 허용합니다."));
-        }
-        //특정 필드 예외가 아닌 전체 예외
-        if (item.getPrice() != null && item.getQuantity() != null) {
-            int resultPrice = item.getPrice() * item.getQuantity();
-            if (resultPrice < 10000) {
-                bindingResult.addError(new ObjectError("item", null, null,
-                        "가격 * 수량의 합은 10,000원 이상이어야 합니다. 현재 값 = " + resultPrice));
-            }
-        }
-        if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            return "validation/v3/addForm";
-        }
-
-        //성공로직
-        Item savedItem = itemRepository.save(item);
-        redirectAttributes.addAttribute("itemId", savedItem.getId());
-        redirectAttributes.addAttribute("status", true);
-        return "redirect:/validation/v3/items/{itemId}";
-    } //이제 form에 기존에 넣었던 값들이 유지된다. 이전 V1에서는 안남았었다.
-
-    //스프링의 바인딩 오류 처리
-    //타입 오류로 바인딩에 실패하면 스프링은 FieldError 를 생성하면서 사용자가 입력한 값을 넣어둔다.
-    //그리고 해당 오류를 BindingResult 에 담아서 컨트롤러를 호출한다. 따라서 타입 오류 같은 바인딩
-    //실패시에도 사용자의 오류 메시지를 정상 출력할 수 있다.
-
-
-    //@PostMapping("/add")
-    public String addItemV3(@ModelAttribute Item item,BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
-
-        if(!StringUtils.hasText(item.getItemName())){
-            bindingResult.addError(new FieldError("item", "itemName",
-                    item.getItemName(), false, new String[]{"required.item.itemName"}, null, null));
-        }
-
-        if (item.getPrice() == null || item.getPrice() < 1000 || item.getPrice() >
-                1000000) {
-            bindingResult.addError(new FieldError(bindingResult.getObjectName(), "price", item.getPrice(),
-                    false, new String[]{"range.item.price"}, new Object[]{1000,1000000},null));
-        }
-        if (item.getQuantity() == null || item.getQuantity() > 10000) {
-            bindingResult.addError(new FieldError("item", "quantity",
-                    item.getQuantity(), false, new String[]{"max.item.quantity"}, new Object[]{9999},null));
-        }
-        //codes : required.item.itemName 를 사용해서 메시지 코드를 지정한다. 메시지 코드는 하나가 아니라
-        //배열로 여러 값을 전달할 수 있는데, 순서대로 매칭해서 처음 매칭되는 메시지가 사용된다.
-        //arguments : Object[]{1000, 1000000} 를 사용해서 코드의 {0} , {1} 로 치환할 값을 전달한다.
-
-        //특정 필드 예외가 아닌 전체 예외
-        if (item.getPrice() != null && item.getQuantity() != null) {
-            int resultPrice = item.getPrice() * item.getQuantity();
-            if (resultPrice < 10000) {
-                bindingResult.addError(new ObjectError("item", new String[]{"totalPriceMin"}, new Object[]{10000,resultPrice}, null));
-            }
-        }
+    @PostMapping("/add")
+    public String addItem(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes){
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
@@ -192,124 +62,26 @@ public class ValidationItemControllerV3 {
         redirectAttributes.addAttribute("status", true);
         return "redirect:/validation/v3/items/{itemId}";
     }
-
-    //@PostMapping("/add")
-    public String addItemV4(@ModelAttribute Item item,BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
-
-        if(!StringUtils.hasText(item.getItemName())){
-            //bindingResult.addError(new FieldError("item", "itemName",
-                   // item.getItemName(), false, new String[]{"required.item.itemName"}, null, null));
-
-            bindingResult.rejectValue("itemName","required");
-            //필드의 이름과 에러코드 첫글자만 넣으면 된다. 이게 무슨일?
-            //오류 메시지가 정상 출력된다. 그런데 errors.properties 에 있는 코드를 직접 입력하지 않았는데
-            //어떻게 된 것일까? 결론적으로는 얘가 V3에서 한 일, 즉 에러를 생성해준다.
-        }
-
-        //ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "itemName","required");
-        //이렇게 ValidationUtils 사용도 가능 위와 동일
-
-        if (item.getPrice() == null || item.getPrice() < 1000 || item.getPrice() >
-                1000000) {
-           // bindingResult.addError(new FieldError(bindingResult.getObjectName(), "price", item.getPrice(),
-                    //false, new String[]{"range.item.price"}, new Object[]{1000,1000000},null));
-            bindingResult.rejectValue("price","range",new Object[]{1000,1000000},null);
-        }
-
-        /**
-         * field : 오류 필드명
-         * errorCode : 오류 코드(이 오류 코드는 메시지에 등록된 코드가 아니다. 뒤에서 설명할
-         * messageResolver를 위한 오류 코드이다.)
-         * errorArgs : 오류 메시지에서 {0} 을 치환하기 위한 값
-         * defaultMessage : 오류 메시지를 찾을 수 없을 때 사용하는 기본 메시지
-         */
-
-        if (item.getQuantity() == null || item.getQuantity() > 10000) {
-           // bindingResult.addError(new FieldError("item", "quantity",
-             //       item.getQuantity(), false, new String[]{"max.item.quantity"}, new Object[]{9999},null));
-            bindingResult.rejectValue("quantity","max",new Object[]{9999},null);
-        }
-
-        //특정 필드 예외가 아닌 전체 예외
-        if (item.getPrice() != null && item.getQuantity() != null) {
-            int resultPrice = item.getPrice() * item.getQuantity();
-            if (resultPrice < 10000) {
-                //bindingResult.addError(new ObjectError("item", new String[]{"totalPriceMin"}, new Object[]{10000,resultPrice}, null));
-                bindingResult.reject("totalPriceMin",new Object[]{10000,resultPrice}, null);
-            }
-        }
-
-        if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            log.info("objectName={}", bindingResult.getObjectName()); //우리의경우 item
-            log.info("target={}", bindingResult.getTarget()); //진짜 객체를 넣는다
-            return "validation/v3/addForm";
-        }
-
-        //성공로직
-        Item savedItem = itemRepository.save(item);
-        redirectAttributes.addAttribute("itemId", savedItem.getId());
-        redirectAttributes.addAttribute("status", true);
-        return "redirect:/validation/v3/items/{itemId}";
-    }
-    //BindingResult 가 제공하는 rejectValue() , reject() 를 사용하면 FieldError , ObjectError 를
-    //직접 생성하지 않고, 깔끔하게 검증 오류를 다룰 수 있다. 리젝트는 오브젝트 리젝트밸류는 필드
+    //검증 순서
+    //1. @ModelAttribute 각각의 필드에 타입 변환 시도
+    //  1. 성공하면 다음으로
+    //  2. 실패하면 typeMismatch 로 FieldError 추가
+    //2. Validator 적용
 
     /**
+     * 바인딩에 성공한 필드만 Bean Validation 적용
+     * BeanValidator는 바인딩에 실패한 필드는 BeanValidation을 적용하지 않는다.
+     * 생각해보면 타입 변환에 성공해서 바인딩에 성공한 필드여야 BeanValidation 적용이 의미 있다.
+     * (일단 모델 객체에 바인딩 받는 값이 정상으로 들어와야 검증도 의미가 있다.)
      *
-     * 정리
-     * 1. rejectValue() 호출
-     * 2. MessageCodesResolver 를 사용해서 검증 오류 코드로 메시지 코드들을 생성
-     * 3. new FieldError() 를 생성하면서 메시지 코드들을 보관
-     * 4. th:errors 에서 메시지 코드들로 메시지를 순서대로 메시지에서 찾고, 노출
+     * @ModelAttribute -> 각각의 필드 타입 변환시도 -> 변환에 성공한 필드만 BeanValidation 적용
+     *
+     * 예)
+     * itemName 에 문자 "A" -> 입력 타입 변환 성공 -> itemName 필드에 BeanValidation 적용
+     * price 에 문자 "A" 입력  -> "A"를 숫자 타입 변환 시도 실패 -> typeMismatch FieldError 추가
+     *  -> price 필드는 BeanValidation 적용 X
      */
 
-
-    //@PostMapping("/add")
-    public String addItemV5(@ModelAttribute Item item,BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model){
-
-        itemValidator.validate(item,bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            log.info("objectName={}", bindingResult.getObjectName()); //우리의경우 item
-            log.info("target={}", bindingResult.getTarget()); //진짜 객체를 넣는다
-            return "validation/v3/addForm";
-        }
-
-        //성공로직
-        Item savedItem = itemRepository.save(item);
-        redirectAttributes.addAttribute("itemId", savedItem.getId());
-        redirectAttributes.addAttribute("status", true);
-        return "redirect:/validation/v3/items/{itemId}";
-    }
-
-
-    @PostMapping("/add")
-    public String addItemV6(@Validated  @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes){
-
-        //@Validated 애노테이션을 추가하면 Item에 대해서 자동으로 검증기가 수행된다. 앞의 코드와는 다르다.
-        //그러면 검증을 마친 결과는 bindingResult에 알아서 담긴다.
-
-        if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            log.info("objectName={}", bindingResult.getObjectName()); //우리의경우 item
-            log.info("target={}", bindingResult.getTarget()); //진짜 객체를 넣는다
-            return "validation/v3/addForm";
-        }
-
-        //성공로직
-        Item savedItem = itemRepository.save(item);
-        redirectAttributes.addAttribute("itemId", savedItem.getId());
-        redirectAttributes.addAttribute("status", true);
-        return "redirect:/validation/v3/items/{itemId}";
-    }
-    //동작 방식
-    //@Validated 는 검증기를 실행하라는 애노테이션이다.
-    //이 애노테이션이 붙으면 앞서 WebDataBinder 에 등록한 검증기를 찾아서 실행한다. 그런데 여러 검증기를
-    //등록한다면 그 중에 어떤 검증기가 실행되어야 할지 구분이 필요하다. 이때 supports() 가 사용된다.
-    //여기서는 supports(Item.class) 호출되고, 결과가 true 이므로 ItemValidator 의 validate() 가
-    //호출된다.
 
     @GetMapping("/{itemId}/edit")
     public String editForm(@PathVariable Long itemId, Model model) {
@@ -326,21 +98,14 @@ public class ValidationItemControllerV3 {
 
 }
 
-/**BindingResult
- * 스프링이 제공하는 검증 오류를 보관하는 객체이다. 검증 오류가 발생하면 여기에 보관하면 된다.
- * BindingResult 가 있으면 @ModelAttribute 에 데이터 바인딩 시 오류가 발생해도 컨트롤러가 호출된다!
+/**
+ *스프링 MVC는 어떻게 Bean Validator를 사용?
+ * 스프링 부트가 spring-boot-starter-validation 라이브러리를 넣으면 자동으로 Bean Validator를
+ * 인지하고 스프링에 통합한다.
  *
- * BindingResult 가 없으면 400 오류가 발생하면서 컨트롤러가 호출되지 않고, 오류 페이지로 이동한다.
- * BindingResult 가 있으면 오류 정보( FieldError )를 BindingResult 에 담아서 컨트롤러를 정상 호출한다.
- *
- * BindingResult에 검증 오류를 적용하는 3가지 방법
- *
- * 1. @ModelAttribute 의 객체에 타입 오류 등으로 바인딩이 실패하는 경우 스프링이 FieldError 생성해서 BindingResult 에 넣어준다. 즉 알아서 해준다,
- * 2. 개발자가 직접 넣어준다.
- * 3. Validator 사용
- *
- * BindingResult 는 검증할 대상 바로 다음에 와야한다. 순서가 중요하다. 예를 들어서 @ModelAttribute
- * Item item , 바로 다음에 BindingResult 가 와야 한다.
- * BindingResult 는 Model에 자동으로 포함된다
+ * 스프링 부트는 자동으로 글로벌 Validator로 등록한다.
+ * LocalValidatorFactoryBean 을 글로벌 Validator로 등록한다. 이 Validator는 @NotNull 같은
+ * 애노테이션을 보고 검증을 수행한다. 이렇게 글로벌 Validator가 적용되어 있기 때문에, @Valid ,
+ * @Validated 만 적용하면 된다.
+ * 검증 오류가 발생하면, FieldError , ObjectError 를 생성해서 BindingResult 에 담아준다.
  */
-
