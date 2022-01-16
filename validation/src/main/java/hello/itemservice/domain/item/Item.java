@@ -12,18 +12,18 @@ import javax.validation.constraints.NotNull;
 //@ScriptAssert(lang = "javascript", script = "_this.price * _this.quantity >= 10000") 제약 조건이 너무 많다.
 public class Item {
 
-    @NotNull(groups = UpdateCheck.class) //수정시에만 적용
+    //@NotNull(groups = UpdateCheck.class) //수정시에만 적용
     private Long id;
 
-    @NotBlank(message = "상품이름은 반드시 적어야합니다.",groups = {SaveCheck.class,UpdateCheck.class})
+    //@NotBlank(message = "상품이름은 반드시 적어야합니다.",groups = {SaveCheck.class,UpdateCheck.class})
     private String itemName;
 
-    @NotNull(groups = {SaveCheck.class,UpdateCheck.class})
-    @Range(min=1000,max=1000000)
+    //@NotNull(groups = {SaveCheck.class,UpdateCheck.class})
+    //@Range(min=1000,max=1000000)
     private Integer price;
 
-    @NotNull(groups = {SaveCheck.class,UpdateCheck.class})
-    @Max(value=9999, groups=SaveCheck.class) //등록시에만 적용
+    //@NotNull(groups = {SaveCheck.class,UpdateCheck.class})
+    //@Max(value=9999, groups=SaveCheck.class) //등록시에만 적용
     private Integer quantity;
 
     public Item() {
