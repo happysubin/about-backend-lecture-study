@@ -2,6 +2,7 @@ package hello.login;
 
 
 import hello.login.web.filter.LogFilter;
+import hello.login.web.filter.LoginCheckFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +16,20 @@ public class WebConfig {
     public FilterRegistrationBean logFilter(){
         FilterRegistrationBean<Filter> filterFilterRegistrationBean = new FilterRegistrationBean<>();
         filterFilterRegistrationBean.setFilter(new LogFilter());
-        filterFilterRegistrationBean.setOrder(1); //순서
-        filterFilterRegistrationBean.addUrlPatterns("/*");
+        filterFilterRegistrationBean.setOrder(1); //첫번째 순서
+        filterFilterRegistrationBean.addUrlPatterns("/*");//모든 경로에 대하여 적용
 
         return filterFilterRegistrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean loginCheckFilter(){
+        FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(new LoginCheckFilter());;
+        filterRegistrationBean.setOrder(2);//2번째
+        filterRegistrationBean.addUrlPatterns("/*"); //white 리스트 적용해서 노상관
+
+        return filterRegistrationBean;
     }
 }
 
