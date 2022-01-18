@@ -3,14 +3,26 @@ package hello.login;
 
 import hello.login.web.filter.LogFilter;
 import hello.login.web.filter.LoginCheckFilter;
+import hello.login.web.interceptor.LogInterceptor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
 
 @Configuration
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LogInterceptor())
+                .order(1)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/css/**,/*.ico","/error");
+    }
+
 
     @Bean
     public FilterRegistrationBean logFilter(){
@@ -31,6 +43,8 @@ public class WebConfig {
 
         return filterRegistrationBean;
     }
+
+
 }
 
 //필터를 등록하는 방법은 여러가지가 있지만, 스프링 부트를 사용한다면 FilterRegistrationBean 을 사용해서 등록하면 된다
