@@ -38,7 +38,7 @@ public class SessionInfoController {
 /**
  * 특정 세션 단위로 시간 설정
  * session.setMaxInactiveInterval(1800); //1800초
- * 
+ *
  * 션 타임아웃 발생
  * 세션의 타임아웃 시간은 해당 세션과 관련된 JSESSIONID 를 전달하는 HTTP 요청이 있으면 현재 시간으로
  * 다시 초기화 된다. 이렇게 초기화 되면 세션 타임아웃으로 설정한 시간동안 세션을 추가로 사용할 수 있다.
