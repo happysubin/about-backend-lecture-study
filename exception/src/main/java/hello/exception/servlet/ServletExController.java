@@ -31,7 +31,7 @@ public class ServletExController {
 
 /**
  * 서블릿은 다음 2가지 방식으로 예외 처리를 지원한다.
- * 
+ *
  * Exception (예외)
  * response.sendError(HTTP 상태 코드, 오류 메시지)
  */
