@@ -27,6 +27,15 @@ public class ServletExController {
     public void error500(HttpServletResponse response) throws IOException {
         response.sendError(500);
     }
+
+    @GetMapping("/error-400")
+    public void error400(HttpServletResponse response) throws IOException {
+        response.sendError(400);
+    }
+    @GetMapping("/error-401")
+    public void error401(HttpServletResponse response) throws IOException {
+        response.sendError(401);
+    }
 }
 
 /**
@@ -34,4 +43,15 @@ public class ServletExController {
  *
  * Exception (예외)
  * response.sendError(HTTP 상태 코드, 오류 메시지)
+ */
+
+
+/**
+ * 개발자는 오류 페이지만 등록
+ * BasicErrorController 는 기본적인 로직이 모두 개발되어 있다.
+ * 개발자는 오류 페이지 화면만 BasicErrorController 가 제공하는 룰과 우선순위에 따라서 등록하면
+ * 된다. 정적 HTML이면 정적 리소스, 뷰 템플릿을 사용해서 동적으로 오류 화면을 만들고 싶으면 뷰 템플릿
+ * 경로에 오류 페이지 파일을 만들어서 넣어두기만 하면 된다.
+ *
+ * 즉 response.sendError에 넣은 상태코드와 맞는 이름을 가진 html을 렌더링한다.
  */
