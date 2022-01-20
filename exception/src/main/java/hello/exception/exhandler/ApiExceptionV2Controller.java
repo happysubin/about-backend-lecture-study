@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 public class ApiExceptionV2Controller {
-
+/*
     @ResponseStatus(HttpStatus.BAD_REQUEST) //이 코드가 없으면 상태 코드가 200으로 정상 완료 된다.
     @ExceptionHandler(IllegalArgumentException.class)
     public ErrorResult illegalExHandle(IllegalArgumentException e) {
@@ -35,7 +35,7 @@ public class ApiExceptionV2Controller {
         log.error("[exceptionHandle] ex", e);
         return new ErrorResult("EX","내부 오류");
     }
-
+*/
     @GetMapping("/api2/members/{id}")
     public MemberDto getMember(@PathVariable("id") String id) {
         if (id.equals("ex")) {
