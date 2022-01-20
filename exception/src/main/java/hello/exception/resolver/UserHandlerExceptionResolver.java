@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-public class UserHandlerExceptionResolver implements HandlerExceptionResolver {
+public class
+UserHandlerExceptionResolver implements HandlerExceptionResolver {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
