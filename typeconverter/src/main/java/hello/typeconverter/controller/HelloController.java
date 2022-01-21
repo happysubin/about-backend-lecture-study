@@ -1,5 +1,6 @@
 package hello.typeconverter.controller;
 
+import hello.typeconverter.type.IpPort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,5 +30,13 @@ public class HelloController {
     //이것은 스프링이 중간에서 타입을 변환해주었기 때문이다.
     //이러한 예는 @ModelAttribute , @PathVariable 에서도 확인할 수 있다.
 
+    @GetMapping("/ip-port")
+    public String ipPort(@RequestParam IpPort ipPort) {
+        System.out.println("ipPort IP = " + ipPort.getIp());
+        System.out.println("ipPort PORT = " + ipPort.getPort());
+        return "ok";
+    }
 
+    //스프링이 내부에서 수 많은 기본 컨버터들을 제공하기 때문이다. 컨버터를 추가하면 추가한 컨버터가 기본
+    //컨버터 보다 높은 우선순위를 가진다.
 }
