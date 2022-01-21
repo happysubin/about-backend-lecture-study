@@ -25,5 +25,5 @@ public class WebConfig implements WebMvcConfigurer {
 }
 
 //• ${number}: 10000
-//• ${{number}}: 10,000 확인 가능
+//• ${{number}}: 10,000 확인 가능능
 
