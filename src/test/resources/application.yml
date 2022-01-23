@@ -14,7 +14,7 @@
 #      hibernate:
   #       show_sql: true
 #        format_sql: true
-# 고로 사실 코드 다 필요 없다 ㅎㅎ 
+# 고로 사실 코드 다 필요 없다 ㅎㅎ
 
 logging:
     level:
