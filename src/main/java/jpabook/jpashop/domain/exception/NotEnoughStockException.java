@@ -6,7 +6,7 @@ public class NotEnoughStockException extends RuntimeException {
     }
 
     public NotEnoughStockException(String message) {
-        super(message);
+        super("오류가 발생함");
     }
 
     public NotEnoughStockException(String message, Throwable cause) {
