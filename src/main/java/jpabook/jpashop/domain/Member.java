@@ -23,4 +23,6 @@ public class Member {
     @OneToMany(mappedBy = "member") //order field에 있는 member에 의해서 매핑된다
     private List<Order> orders=new ArrayList<>();
 
+
+
 }
