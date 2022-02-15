@@ -20,6 +20,10 @@ public class Order {
     @OneToMany(mappedBy ="order")
     List<OrderItem> orderItems=new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name="DELIVERY_ID")
+    private Delivery delivery;
+
     private LocalDateTime orderDate;
 
     @Enumerated(EnumType.STRING)
