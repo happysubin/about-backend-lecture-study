@@ -18,13 +18,39 @@ public class JpaMain {
 
         tx.begin();
         try{
+            Team team=new Team();
+            team.setName("TEAMA");
+            em.persist(team);
 
-            Member member=new Member();
-            member.setId(1L);
-            member.setName("userA");
-            member.setRoleType(RoleType.USER);
-            em.persist(member);
-            //비영속
+           User user=new User();
+           user.setName("user1");
+
+           //team.getMembers().add(user); //이것만 하면 연관관계 주인에게 teamId가 들어가지 않는다. 앍가 전용
+           user.setTeam(team); //이렇게 해야 한다!!!
+            em.persist(user);
+            //but 양쪽에 그냥 다 넣는게 실수 안한다.. 그리고 그 코드가 객체지향적
+
+            em.flush();
+            em.clear();
+
+            Team findTeam=em.find(Team.class,team.getId());
+            List<User> members=findTeam.getMembers();
+
+            for (User member : members) {
+                System.out.println("member = " + member.getName());
+            }
+
+
+
+            em.persist(user);
+
+
+
+
+           em.flush();
+           em.clear();
+
+
 
             //Member member1=new Member();
             //member1.setId(9L);

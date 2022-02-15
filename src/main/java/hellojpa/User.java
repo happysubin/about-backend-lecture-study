@@ -7,9 +7,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Member {
+public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) //이게 기본
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)// 이게 기본
+    @Column(name="USER_NAME")
     //GenerationType.IDENTITY 이건 DB에게 기본 키 생성을 위임. 주로 MySQL, PostgreSQL, SQL Server, DB2에서 사용 
     //대신 이론상 이건 DB에 커밋되야지 key가 생김. 근데 영속성 컨텍스트에서는 아직 커밋되기 전이다. 따라서 키가 없어!!! but Identity는 예외적으로
     //em.persist 메소드를 사용하면 insert 쿼리가 날라간다. 그래서 커밋전에 key를 받을 수 있다.
@@ -18,9 +19,14 @@ public class Member {
     //SEQUENCE는 em.persist 시점에 DB에서 키를 가져온다. 이 값을 얻어서 엔티티에 넣고 엔티티를 영속성 컨텍스트에 넣어버린다.
     private Long id; //무조건 Long 사용하자.
 
-    @Column(name="name")
+    @Column(name="USERNAME")
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name="TEAM_ID")
+    private Team team;
+
+    /*
     private String username;
 
     private Integer age;
@@ -37,9 +43,8 @@ public class Member {
     @Lob //큰 문자열을 넣고 싶다면 사용
     private String description;
 
-    public Member() {
 
-    }
+     */
 
     public Long getId() {
         return id;
@@ -57,51 +62,11 @@ public class Member {
         this.name = name;
     }
 
-    public String getUsername() {
-        return username;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public RoleType getRoleType() {
-        return roleType;
-    }
-
-    public void setRoleType(RoleType roleType) {
-        this.roleType = roleType;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

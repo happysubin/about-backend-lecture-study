@@ -1,12 +1,18 @@
 package hellojpa.jpashop.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Member {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="MEMBER_ID")
     private Long id;
+
+    @OneToMany(mappedBy = "member")
+    List<Order> orders=new ArrayList<>(); //이건 별로인 코드. 그러나 예제니까 ㅎㅎ
+
     private String name;
     private String city;
     private String street;
