@@ -2,6 +2,7 @@ package hellojpa.jpashop;
 
 import hellojpa.User;
 import hellojpa.RoleType;
+import hellojpa.jpashop.domain.Book;
 import hellojpa.jpashop.domain.Order;
 import hellojpa.jpashop.domain.OrderItem;
 
@@ -23,13 +24,11 @@ public class JpaMain {
         tx.begin();
         try{
 
-            Order order=new Order();
-            em.persist(order);
+            Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("kim");
 
-            order.addOrderItem(new OrderItem());
-            em.persist(order);
-
-            //단방향 연관관계 설계가 제일 중요하다!!!!
+            em.persist(book);
 
             tx.commit(); //커밋하는 순간 DB에 insert sql을 보낸다. 명심하자!!!!!!
         }
