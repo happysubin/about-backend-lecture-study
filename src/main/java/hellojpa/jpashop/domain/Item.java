@@ -14,7 +14,7 @@ public abstract class Item extends BaseEntity{
     @Column(name="ITEM_ID")
     private Long id;
 
-    @ManyToMany(mappedBy = "items")
+    @ManyToMany(mappedBy = "items")//기본이 LAZY
     private List<Category> catogries=new ArrayList<>();
 
     private String name;

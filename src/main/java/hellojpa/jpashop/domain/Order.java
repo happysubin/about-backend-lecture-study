@@ -13,14 +13,14 @@ public class Order extends BaseEntity{
     @Column(name="ORDER_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy ="order")
+    @OneToMany(mappedBy ="order",cascade =CascadeType.ALL)//기본이 지연로딩
     List<OrderItem> orderItems=new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL)//일단은 주문에 의해 생성된다.
     @JoinColumn(name="DELIVERY_ID")
     private Delivery delivery;
 

@@ -10,7 +10,7 @@ public class Member extends BaseEntity{
     @Column(name="MEMBER_ID")
     private Long id;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member")//기본이 지연로딩
     List<Order> orders=new ArrayList<>(); //이건 별로인 코드. 그러나 예제니까 ㅎㅎ
 
     private String name;

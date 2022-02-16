@@ -12,15 +12,15 @@ public class Category extends BaseEntity{
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PARENT_ID")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent")//기본이 Lazy
     private List<Category> child=new ArrayList<>();
     //셀프
 
-    @ManyToMany
+    @ManyToMany//기본이 LAZY
     @JoinTable(name="CATEGORY_ITEM",
     joinColumns = @JoinColumn(name="CAGEGORY_ID"),
             inverseJoinColumns = @JoinColumn(name="ITEM_ID")
