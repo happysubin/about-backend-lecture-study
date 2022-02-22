@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
+//스프링 부트가 버전관리도 다 해준다.
 
 group = 'jpabook'
 version = '0.0.1-SNAPSHOT'
