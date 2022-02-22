@@ -21,7 +21,7 @@ public class Order {
     @JoinColumn(name="member_id")
     private Member member; //연관 관계의 주인
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)//default가 FetchType.LAZY
     private List<OrderItem> orderItems=new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
