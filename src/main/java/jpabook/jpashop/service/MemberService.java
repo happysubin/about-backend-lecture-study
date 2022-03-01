@@ -37,6 +37,13 @@ public class MemberService {
     public Member findOne(Long memberId){
         return memberRepository.findOne(memberId);
     }
+
+    @Transactional
+    public void update(Long id, String name) {
+        Member member = memberRepository.findOne(id);
+        member.setName(name);
+    }
+    //만약 member를 리턴하면 영속 상태가 끊긴 멤버를 반환하는 것이다.
 }
 
 //@Transactional : 트랜잭션, 영속성 컨텍스트
