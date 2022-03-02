@@ -94,4 +94,11 @@ public class OrderRepository {
         return query.getResultList();
     }
     //사실 실무에서는 쿼리dsl을 사용
+
+    public List<Order> findAllwithMemberDelivery(){
+        return em.createQuery("select o from Order o" +
+                " join fetch o.member m" + " join fetch o.delivery d",
+                Order.class).getResultList();
+    }
+
 }
