@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.UniqueElements;
@@ -22,6 +23,7 @@ public class Member {
     @Embedded
     private Address address;
 
+    //@JsonIgnore DTO를 사용하면 불필요하다.
     @OneToMany(mappedBy = "member")
     private List<Order> orders=new ArrayList<>();
 
