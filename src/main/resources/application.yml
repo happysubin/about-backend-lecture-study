@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none #데베 상태 유지
+      ddl-auto: create #데베 상태 유지
     properties:
       hibernate:
         format_sql: true
