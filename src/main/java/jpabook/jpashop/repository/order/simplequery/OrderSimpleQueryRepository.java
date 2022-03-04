@@ -21,7 +21,7 @@ public class OrderSimpleQueryRepository {
                         " join o.member m" +
                         " join o.delivery d", OrderSimpleQueryDto.class)
                 .getResultList();
-        //컬렉션 페치 조인은 1개만 사용할 수 있다. 컬렉션 둘 이상에 페치 조인을 사용하면 안된다. 데이터가 부정합하게 조회될 수 있다. 
+
     }
 
 }

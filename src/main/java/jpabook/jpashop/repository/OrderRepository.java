@@ -110,4 +110,26 @@ public class OrderRepository {
                                         " join fetch oi.item i", Order.class)
                                         .getResultList();
     }
+    //컬렉션 페치 조인은 1개만 사용할 수 있다. 컬렉션 둘 이상에 페치 조인을 사용하면 안된다. 데이터가 부정합하게 조회될 수 있다.
+    //일대다를 페치 조인하면 페이징이 안된다.
+
+    public List<Order> findAllwithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d",
+                        Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+    /*
+     *먼저 ToOne(OneToOne, ManyToOne) 관계를 모두 페치조인 한다. ToOne 관계는 row수를 증가시키지 않으므로 페이징 쿼리에 영향을 주지 않는다.
+     컬렉션은 지연 로딩으로 조회한다.
+     지연 로딩 성능 최적화를 위해 hibernate.default_batch_fetch_size , @BatchSize 를 적용한다.
+     hibernate.default_batch_fetch_size: 글로벌 설정
+     @BatchSize: 개별 최적화
+     이 옵션을 사용하면 컬렉션이나, 프록시 객체를 한꺼번에 설정한 size 만큼 IN 쿼리로 조회한다.
+     */
+
 }
