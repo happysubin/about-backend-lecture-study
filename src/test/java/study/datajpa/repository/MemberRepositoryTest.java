@@ -22,10 +22,10 @@ class MemberRepositoryTest {
 
     @Test
     void test(){
-        Member member = new Member();
+        Member member = new Member("hello");
         Member savedMember = memberRepository.save(member);
         Member findMember = memberRepository.findById(savedMember.getId()).get(); //이게 좋은 방법은 아님.
-        
+
         Assertions.assertThat(findMember.getId()).isEqualTo(savedMember.getId());
         Assertions.assertThat(findMember).isEqualTo(savedMember);
 
