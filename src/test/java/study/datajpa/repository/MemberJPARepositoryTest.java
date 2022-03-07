@@ -52,7 +52,8 @@ class MemberJPARepositoryTest {
         assertThat(deletedCount).isEqualTo(0);
     }
 
-    @Test  public void findByUsernameAndAgeGreaterThan() {
+    @Test
+    public void findByUsernameAndAgeGreaterThan() {
         Member m1 = new Member("AAA", 10);
         Member m2 = new Member("AAA", 20);
         memberJPARepository.save(m1);
@@ -64,4 +65,19 @@ class MemberJPARepositoryTest {
         assertThat(result.get(0).getAge()).isEqualTo(20);
         assertThat(result.size()).isEqualTo(1);
     }
+
+    @Test
+    public void testNamedQuery(){
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("AAA", 20);
+        memberJPARepository.save(m1);
+        memberJPARepository.save(m2);
+
+        List<Member> result = memberJPARepository.findByUsername("AAA");
+        Member member = result.get(0);
+
+        assertThat(member).isEqualTo(m1);
+    }
+    //스프링 데이터 JPA를 사용하면 실무에서 Named Query를 직접 등록해서 사용하는 일은 드물다고 한다.
+
 }
