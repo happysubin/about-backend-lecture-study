@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.domain.Member;
+import study.datajpa.domain.Team;
+import study.datajpa.dto.MemberDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,8 @@ class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
+    @Autowired
+    TeamRepository teamRepository;
 
 
     @Test
@@ -56,5 +60,35 @@ class MemberRepositoryTest {
         List<Member> result = memberRepository.findUser("AAA", 10);
 
         assertThat(result.get(0)).isEqualTo(m1);
+    }
+
+    @Test
+    void findUsernameList(){
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<String> result = memberRepository.findUsernameList();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+
+    }
+
+    @Test
+    void findMemberDto(){
+        Team team = new Team("teamA");
+        teamRepository.save(team);
+
+        Member m1 = new Member("AAA",10);
+        m1.setTeam(team);
+        memberRepository.save(m1);
+
+        List<MemberDto> usernameList=memberRepository.findMemberDto();
+        for (MemberDto dto : usernameList) {
+            System.out.println("dto = " + dto);
+        }
     }
 }

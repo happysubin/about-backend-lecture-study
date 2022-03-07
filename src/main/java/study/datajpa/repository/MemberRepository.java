@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.type.classreading.MethodsMetadataReader;
 import study.datajpa.domain.Member;
+import study.datajpa.dto.MemberDto;
 
 import java.util.List;
 
@@ -20,4 +21,10 @@ public interface MemberRepository extends JpaRepository<Member,Long> { //타입�
     @Query("select m from Member m where m.username = :username and m.age = :age") //jpql을 인터페이스 메소드에 바로 작성
     List<Member> findUser(@Param("username") String username, @Param("age") int age); //이 기능을 굉장히 많이 쓴다. 집중!!!
     //JPA Named 쿼리처럼 애플리케이션 실행 시점에 문법 오류를 발견할 수 있음(매우 큰 장점!)
+
+    @Query("select m.username from Member m")
+    List<String> findUsernameList(); //사용자 이름만 다 가져오고 싶다면??
+
+    @Query("select new study.datajpa.dto.MemberDto(m.id, m.username, t.name) " + "from Member m join m.team t") //dto는 늘 new 오퍼레이션을 사용
+    List<MemberDto> findMemberDto();
 }
