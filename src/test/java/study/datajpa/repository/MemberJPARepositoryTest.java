@@ -80,4 +80,22 @@ class MemberJPARepositoryTest {
     }
     //스프링 데이터 JPA를 사용하면 실무에서 Named Query를 직접 등록해서 사용하는 일은 드물다고 한다.
 
+    @Test
+    public void paging() throws Exception {
+        memberJPARepository.save(new Member("member1", 10));
+        memberJPARepository.save(new Member("member2", 10));
+        memberJPARepository.save(new Member("member3", 10));
+        memberJPARepository.save(new Member("member4", 10));
+        memberJPARepository.save(new Member("member5", 10));
+        int age = 10;
+        int offset = 0;
+        int limit = 3;
+
+        List<Member> members = memberJPARepository.findByPage(age, offset, limit);
+        long totalCount = memberJPARepository.totalCount(age);
+
+        Assertions.assertThat(members.size()).isEqualTo(3);
+        Assertions.assertThat(totalCount).isEqualTo(5);
+    }
+
 }
