@@ -8,6 +8,7 @@ import study.datajpa.domain.Member;
 import study.datajpa.dto.MemberDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member,Long> { //타입과 아이디
 
@@ -30,4 +31,9 @@ public interface MemberRepository extends JpaRepository<Member,Long> { //타입�
 
     @Query("select m from Member m where m.username in :names")// 컬렉션 타입으로 in절 지원
     List<Member> findByNames(@Param("names") List<String> names); // 이거는 실무에서 많이 쓴다고 한다.
+
+    List<Member> findListByUsername(String name); //컬렉션
+    Member findByUsername(String name); //단건
+    Optional<Member> findOptionalByUsername(String name);
+    //반환 타입이 상당히 유연하다.
 }

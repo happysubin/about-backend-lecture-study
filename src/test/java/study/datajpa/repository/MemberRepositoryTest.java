@@ -104,6 +104,34 @@ class MemberRepositoryTest {
         for (Member member : usernameList) {
             System.out.println("member.getUsername() = " + member.getUsername());
         }
+    }
+
+    @Test
+    void returnType(){
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> usernameList = memberRepository.findListByUsername("AAA");
+        Member member = memberRepository.findByUsername("AAA");
+        Optional<Member> aaa = memberRepository.findOptionalByUsername("AAA");
+
+        for (Member member1 : usernameList) {
+            System.out.println("member1 = " + member1.getUsername());
+        }
+        System.out.println("member.getUsername() = " + member.getUsername());
+        System.out.println("aaa.get().getUsername() = " + aaa.get().getUsername());
+        //정말 유연하게 반환 타입을 지원한다.
+
+        //조회 결과가 많거나 없으면?
+        // 컬렉션
+        //결과 없음: 빈 컬렉션 반환
+
+        // 단건 조회
+        //결과 없음: null 반환
+        //결과가 2건 이상: javax.persistence.NonUniqueResultException 예외 발생
         
+
     }
 }
