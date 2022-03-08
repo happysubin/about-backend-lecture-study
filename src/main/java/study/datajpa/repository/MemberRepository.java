@@ -1,5 +1,7 @@
 package study.datajpa.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +38,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> { //타입�
     Member findByUsername(String name); //단건
     Optional<Member> findOptionalByUsername(String name);
     //반환 타입이 상당히 유연하다.
+
+
+    Page<Member> findByAge(int age, Pageable pageable);
 }
