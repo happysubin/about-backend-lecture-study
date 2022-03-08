@@ -27,4 +27,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> { //타입�
 
     @Query("select new study.datajpa.dto.MemberDto(m.id, m.username, t.name) " + "from Member m join m.team t") //dto는 늘 new 오퍼레이션을 사용
     List<MemberDto> findMemberDto();
+
+    @Query("select m from Member m where m.username in :names")// 컬렉션 타입으로 in절 지원
+    List<Member> findByNames(@Param("names") List<String> names); // 이거는 실무에서 많이 쓴다고 한다.
 }
