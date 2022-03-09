@@ -98,4 +98,18 @@ class MemberJPARepositoryTest {
         Assertions.assertThat(totalCount).isEqualTo(5);
     }
 
+    @Test
+    public void bulkUpdate() throws Exception {
+        //given
+        memberJPARepository.save(new Member("member1", 10));
+        memberJPARepository.save(new Member("member2", 19));
+        memberJPARepository.save(new Member("member3", 20));
+        memberJPARepository.save(new Member("member4", 21));
+        memberJPARepository.save(new Member("member5", 40));
+        //when
+        int resultCount = memberJPARepository.bulkAgePlus(20);
+        //then
+        assertThat(resultCount).isEqualTo(3);
+    }
+
 }
