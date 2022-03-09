@@ -2,6 +2,7 @@ package study.datajpa.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,6 +11,7 @@ import org.springframework.data.type.classreading.MethodsMetadataReader;
 import study.datajpa.domain.Member;
 import study.datajpa.dto.MemberDto;
 
+import javax.persistence.Entity;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,4 +49,18 @@ public interface MemberRepository extends JpaRepository<Member,Long> { //타입�
     @Modifying(clearAutomatically = true)
     @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
     int bulkAgePlus(@Param("age") int age);
+
+    //공통 메서드 오버라이드
+    @Override
+    @EntityGraph(attributePaths = {"team"}) //페치 조인처럼 한번에 엔티티들을 가져옴
+    List<Member> findAll();
+
+    //JPQL + 엔티티 그래프
+    @EntityGraph(attributePaths = {"team"})
+    @Query("select m from Member m")
+    List<Member> findMemberEntityGraph();
+
+    //메서드 이름으로 쿼리에서 특히 편리하다.
+    @EntityGraph(attributePaths = {"team"})
+    List<Member> findByUsername(String username)
 }

@@ -112,4 +112,5 @@ class MemberJPARepositoryTest {
         assertThat(resultCount).isEqualTo(3);
     }
 
+
 }

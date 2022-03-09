@@ -13,6 +13,8 @@ import study.datajpa.domain.Member;
 import study.datajpa.domain.Team;
 import study.datajpa.dto.MemberDto;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,8 @@ class MemberRepositoryTest {
     MemberRepository memberRepository;
     @Autowired
     TeamRepository teamRepository;
+    @PersistenceContext
+    EntityManager em;
 
 
     @Test
@@ -173,6 +177,44 @@ class MemberRepositoryTest {
         int resultCount = memberRepository.bulkAgePlus(20);
 //then
         assertThat(resultCount).isEqualTo(3);
+    }
+
+    @Test
+    public void findMemberLazy() throws Exception {
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        memberRepository.save(new Member("member1", 10, teamA));
+        memberRepository.save(new Member("member2", 20, teamB));
+        em.flush();
+        em.clear();
+        //when
+        List<Member> members = memberRepository.findAll();
+        //then
+        for (Member member : members) {
+            member.getTeam().getName();
+        }
+    }
+
+    @Test
+    void entityGraphTest(){
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        memberRepository.save(new Member("member1", 10, teamA));
+        memberRepository.save(new Member("member2", 20, teamB));
+        em.flush();
+        em.clear();
+
+        List<Member> all = memberRepository.findAll();
+        for (Member member : all) {
+            System.out.println("member = " + member);
+            System.out.println("member = " + member.getTeam());
+        }
+
+
     }
 
 }
