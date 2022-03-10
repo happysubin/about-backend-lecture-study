@@ -213,8 +213,18 @@ class MemberRepositoryTest {
             System.out.println("member = " + member);
             System.out.println("member = " + member.getTeam());
         }
-
-
     }
 
+    @Test
+    public void queryHint() throws Exception {
+        //given
+        memberRepository.save(new Member("member1", 10));
+        em.flush();
+        em.clear();
+        //when
+        Member member = memberRepository.findReadOnlyByUsername("member1");
+        member.setUsername("member2");
+        em.flush(); //Update Query 실행X } 사실 성능에 큰 차이가 없다고 한다.
+
+    }
 }

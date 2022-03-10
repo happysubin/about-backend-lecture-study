@@ -2,16 +2,15 @@ package study.datajpa.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.type.classreading.MethodsMetadataReader;
 import study.datajpa.domain.Member;
 import study.datajpa.dto.MemberDto;
 
 import javax.persistence.Entity;
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +60,13 @@ public interface MemberRepository extends JpaRepository<Member,Long> { //타입�
     List<Member> findMemberEntityGraph();
 
     //메서드 이름으로 쿼리에서 특히 편리하다.
-    @EntityGraph(attributePaths = {"team"})
-    List<Member> findByUsername(String username)
+    //@EntityGraph(attributePaths = {"team"})
+    //List<Member> findByUsername(String username)
+
+    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true")) //100퍼센트 읽기만 하겠다
+    Member findReadOnlyByUsername(String username);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    List<Member> findByUsername(String name);
+    //비관적 락은 이름 그대로 트랜잭션의 충돌이 발생한다고 가정하고 우선 락을 걸고 보는 방법이다.
 }
