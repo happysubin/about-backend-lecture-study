@@ -1,0 +1,6 @@
+server:
+  port: 8088
+
+logging:
+  level:
+    org.springframework: DEBUG #많은 로그들을 확인 가능
