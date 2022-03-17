@@ -1,4 +1,4 @@
-package springapi.api;
+package springapi.api.helloworld;
 
 import lombok.Data;
 
