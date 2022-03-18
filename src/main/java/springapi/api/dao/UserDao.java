@@ -5,10 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import springapi.api.domain.User;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -42,4 +39,32 @@ public class UserDao {
                 .filter(u -> u.getId().equals(id))
                 .findFirst().orElse(null);
     }
+
+    public User deleteById(Long id){
+        Iterator<User> iterator = users.iterator();
+
+        while (iterator.hasNext()){
+            User user = iterator.next();
+
+            if(user.getId() == id){
+                iterator.remove();
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public User edit(Long id,User user){
+        Iterator<User> iterator = users.iterator();
+
+        while (iterator.hasNext()){
+            User findUser = iterator.next();
+            if(findUser.getId() == id){
+                findUser.setName(user.getName());
+                return findUser;
+            }
+        }
+        return null;
+    }
+
 }
