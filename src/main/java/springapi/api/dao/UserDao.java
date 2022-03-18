@@ -40,6 +40,6 @@ public class UserDao {
     public User findOne(Long id){
        return users.stream()
                 .filter(u -> u.getId().equals(id))
-                .findFirst().get();
+                .findFirst().orElse(null);
     }
 }

@@ -1,4 +1,4 @@
-package springapi.api.Controller;
+package springapi.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springapi.api.dao.UserDao;
 import springapi.api.domain.User;
+import springapi.api.exception.UserNotFoundException;
 
 import java.net.URI;
 import java.util.List;
@@ -26,7 +27,11 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public User retrieveUser(@PathVariable Long id){
-        return userDao.findOne(id);
+        User user = userDao.findOne(id);
+        if(user == null){
+            throw new UserNotFoundException(String.format("ID[%s] not found",id));
+        }
+        return user;
     }
 
     @PostMapping("/users")
