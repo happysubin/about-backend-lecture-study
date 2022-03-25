@@ -4,3 +4,9 @@ server:
 logging:
   level:
     org.springframework: DEBUG #많은 로그들을 확인 가능
+
+
+
+spring:
+  messages:
+    basename: messages
