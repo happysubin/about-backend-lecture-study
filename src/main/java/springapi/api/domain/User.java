@@ -1,5 +1,6 @@
 package springapi.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,8 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
-@JsonIgnoreProperties(value = {"password"}) //password만 제외딘다. 클래스 상단에서 사용
+//@JsonIgnoreProperties(value = {"password"}) //password만 제외딘다. 클래스 상단에서 사용
+@JsonFilter("UserInfo")
 public class User {
     private Long id;
 
