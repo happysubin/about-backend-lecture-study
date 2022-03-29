@@ -42,8 +42,11 @@ public class AdminController {
 
         return mapping;
     }
-    @GetMapping("/v1/users/{id}")
-    public MappingJacksonValue retrieveUserV1(@PathVariable Long id){
+    //@GetMapping("/v1/users/{id}") uri
+    //@GetMapping(value="/users/{id}/",params="version=1") 파라미터 http://localhost:8088/admin/users/1/?version=1
+    //@GetMapping(value="/users/{id}",headers = "X-API-VERSION=1") //헤더 필드 X-API-VERSION 추가 value에 1을 넣는다.
+    @GetMapping(value="/users/{id}",produces = "application/vnd.company.appv1+json") //헤더에 Accept
+    public MappingJacksonValue retrieveUserV1(@PathVariable Long id){                   //value는 application/vnd.company.appv1+json
         User user = userDao.findOne(id);
 
         if(user == null){
@@ -62,7 +65,10 @@ public class AdminController {
         return mapping;
     }
 
-    @GetMapping("/v2/users/{id}")
+    //@GetMapping("/v2/users/{id}")
+    //@GetMapping(value="/users/{id}/",params="version=2") http://localhost:8088/admin/users/1/?version=2
+    //@GetMapping(value="/users/{id}",headers = "X-API-VERSION=2")
+    @GetMapping(value="/users/{id}",produces = "application/vnd.company.appv2+json") //mimetype를 이용
     public MappingJacksonValue retrieveUserV2(@PathVariable Long id){
         User user = userDao.findOne(id);
 
