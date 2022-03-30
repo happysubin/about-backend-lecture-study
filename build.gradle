@@ -41,6 +41,16 @@ dependencies {
 	//swagger을 편하게 적용하기
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
+
+	//actuator 사용
+
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
+	//implementatio group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.4.1'
+	//compile 는 삭제되었으므로 implementation을 사용
+	//actuator은 안된다... 일단 넘어가자 충돌이 일어나는 듯.
+
+
+
 }
 
 tasks.named('test') {
