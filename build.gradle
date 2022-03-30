@@ -50,6 +50,13 @@ dependencies {
 	//actuator은 안된다... 일단 넘어가자 충돌이 일어나는 듯.
 
 
+	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-rest-hal-browser
+	implementation group: 'org.springframework.data', name: 'spring-data-rest-hal-browser', version: '3.3.9.RELEASE'
+
+
+
+
+
 
 }
 
