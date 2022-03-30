@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 //@JsonIgnoreProperties(value = {"password"}) //password만 제외딘다. 클래스 상단에서 사용
 @NoArgsConstructor
-@JsonFilter("UserInfo")
+//@JsonFilter("UserInfo")
 public class User {
     private Long id;
 
