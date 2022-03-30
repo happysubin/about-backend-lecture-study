@@ -36,6 +36,11 @@ dependencies {
 
 	//hateoas 사용
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+
+
+	//swagger을 편하게 적용하기
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
 }
 
 tasks.named('test') {

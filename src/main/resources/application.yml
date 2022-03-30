@@ -6,7 +6,20 @@ logging:
     org.springframework: DEBUG #많은 로그들을 확인 가능
 
 
+#spring:
+#
+#  mvc:
+#
+#    pathmatch:
+#
+#      matching-strategy: ant_path_matcher 이 부분으로
+##    Failed to start bean 'documentationPluginsBootstrapper'; nested exception is java.lang.NullPointerException
+#     에러를 해결했다
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   messages:
     basename: messages
+
