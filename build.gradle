@@ -53,9 +53,17 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-rest-hal-browser
 	implementation group: 'org.springframework.data', name: 'spring-data-rest-hal-browser', version: '3.3.9.RELEASE'
 
-
-
-
+	//스프링 시큐리티
+	/**
+	 * 적용하면 메소드에 권한 인증이 걸린다.
+	 * postman에서 Authorization에서 Basic Auth 로 들어가서
+	 *
+	 * 스프링 시큐리티가 생성한 아래 비번과 user을 로그인에 넣어야 한다.
+	 * 49497494-6f56-45c6-9dfe-9b99848fe9dd
+	 * 이렇게 해야지 api 사용이 가능하다.
+	 */
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
 
 
 }

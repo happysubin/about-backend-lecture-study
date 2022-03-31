@@ -17,11 +17,16 @@ logging:
 #     에러를 해결했다
 
 spring:
+  security:
+    user:
+      name: username
+      password: password   #시큐리티가 설정한 것 말고 우리가 직접 설정
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   messages:
     basename: messages
+
 
 management:
   endpoints:
