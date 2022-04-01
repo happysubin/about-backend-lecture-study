@@ -7,6 +7,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -18,7 +21,11 @@ import java.util.Date;
 @NoArgsConstructor
 //@JsonFilter("UserInfo")
 @ApiModel(description = "사용자 상세 정보를 위한 도메인 객체")
+@Entity
 public class User {
+
+    @Id
+    @GeneratedValue
     private Long id;
 
     @Size(min=2,message = "Name는 2글자 이상 입력하세요") //한 글자만 넣으면 상태코드 400이 리턴증
@@ -35,6 +42,8 @@ public class User {
     //@JsonIgnore
     @ApiModelProperty(notes = "사용자 주민번호을 입력하시오")
     private String ssn;
+
+
 
 
 

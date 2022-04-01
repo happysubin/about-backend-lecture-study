@@ -17,6 +17,20 @@ logging:
 #     에러를 해결했다
 
 spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/api
+    username: sa
+    password :
+      driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+
   security:
     user:
       name: username
