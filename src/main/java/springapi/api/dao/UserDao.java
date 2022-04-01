@@ -14,9 +14,9 @@ public class UserDao {
     private  static Long userCount=3L;
 
     static{
-        users.add(new User(1L,"user1",new Date(),"pass1","123456-123456"));
-        users.add(new User(2L,"user2",new Date(),"pass2","654321-654321"));
-        users.add(new User(3L,"user3",new Date(),"pass3","321654-321654"));
+        //users.add(new User(1L,"user1",new Date(),"pass1","123456-123456"));
+        //users.add(new User(2L,"user2",new Date(),"pass2","654321-654321"));
+        //users.add(new User(3L,"user3",new Date(),"pass3","321654-321654"));
     }
 
     public List<User> findAll(){

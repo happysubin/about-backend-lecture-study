@@ -10,9 +10,11 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -42,6 +44,9 @@ public class User {
     //@JsonIgnore
     @ApiModelProperty(notes = "사용자 주민번호을 입력하시오")
     private String ssn;
+
+    @OneToMany(mappedBy = "user")
+    List<Post> post;
 
 
 

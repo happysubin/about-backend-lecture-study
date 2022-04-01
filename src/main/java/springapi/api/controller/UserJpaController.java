@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springapi.api.domain.Post;
 import springapi.api.domain.User;
 import springapi.api.exception.UserNotFoundException;
+import springapi.api.repository.PostRepository;
 import springapi.api.repository.UserRepository;
 
 import javax.annotation.PostConstruct;
@@ -27,10 +29,42 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 public class UserJpaController {
 
     private UserRepository userRepository;
+    private PostRepository postRepository;
 
     @Autowired
-    public UserJpaController(UserRepository userRepository) {
-        this.userRepository =userRepository;
+    public UserJpaController(UserRepository userRepository,PostRepository postRepository) {
+        this.userRepository = userRepository;
+        this.postRepository = postRepository;
+    }
+
+    @GetMapping("/users/{id}/post")
+    public List<Post> retrieveAllPstsByUser(@PathVariable Long id){
+        Optional<User> user = userRepository.findById(id);
+        if(!user.isPresent()){
+            throw new UserNotFoundException("해당 아이디"+ id+ " 를 가진 유저가 없습니다.");
+        }
+
+        return user.get().getPost();
+
+    }
+
+    @PostMapping("/users/{id}/posts")
+    public ResponseEntity<Post> createPost(@PathVariable Long id,@Validated @RequestBody Post post ) {
+        Optional<User> user = userRepository.findById(id);
+
+        if(!user.isPresent()){
+            throw new UserNotFoundException("유저가 없습니다");
+        }
+        post.setUser(user.get()); //연관관계의 주인
+        Post savedPost = postRepository.save(post);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedPost.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
+
     }
 
     @GetMapping("/users")
@@ -43,8 +77,6 @@ public class UserJpaController {
     @GetMapping("/users/{id}")
     public EntityModel<User> retrieveUser(@PathVariable Long id){
         Optional<User> user = userRepository.findById(id);
-
-        System.out.println("user.get() = " + user.get());
 
         if(!user.isPresent()){
             throw new UserNotFoundException("해당 아이디"+ id+ " 를 가진 유저가 없습니다.");
@@ -82,4 +114,6 @@ public class UserJpaController {
         userRepository.save(new User());
         userRepository.save(new User());
     }
+
+
 }
