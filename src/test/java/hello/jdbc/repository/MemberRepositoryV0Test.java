@@ -18,7 +18,7 @@ class MemberRepositoryV0Test {
     @Test
     void crud() throws SQLException {
         //save
-        Member member = new Member("v021", 10000);
+        Member member = new Member("0", 10000);
 
         repository.save(member); //h2에서 저장한 데이터를 확인했다.
 
@@ -27,5 +27,14 @@ class MemberRepositoryV0Test {
         log.info("findMember={}",findMember);
 
         assertThat(member).isEqualTo(findMember);
+
+        //update : money 10000원에서 20000으로
+        repository.update(member.getMemberId(), 20000);
+        Member updateMember = repository.findById(member.getMemberId());
+        assertThat(updateMember.getMoney()).isEqualTo(20000);
+
+
+        //delete
+        repository.delete(member.getMemberId());
     }
 }
