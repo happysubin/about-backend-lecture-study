@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class MemberServiceV4 {
 
-    private final MemberRepositoryV4_1 memberRepository;
+    private final MemberRepository memberRepository;
 
-    public MemberServiceV4(MemberRepositoryV4_1 memberRepository) {
+    public MemberServiceV4(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
