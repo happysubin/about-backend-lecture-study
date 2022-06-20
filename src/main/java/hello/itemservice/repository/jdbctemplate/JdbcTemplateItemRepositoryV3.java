@@ -7,46 +7,41 @@ import hello.itemservice.repository.ItemUpdateDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
-public class JdbcTemplateItemRepositoryV2 implements ItemRepository {
+public class JdbcTemplateItemRepositoryV3 implements ItemRepository {
 
-    //만약 JdbcTemplate를 사용한다면 이것을 많이 사용한다고 한다.
+    //
     private final NamedParameterJdbcTemplate template;
+    private final SimpleJdbcInsert jdbcInsert;
 
-    public JdbcTemplateItemRepositoryV2(DataSource dataSource) {
+    public JdbcTemplateItemRepositoryV3(DataSource dataSource) {
         this.template = new NamedParameterJdbcTemplate(dataSource);
+        this.jdbcInsert = new SimpleJdbcInsert(dataSource)
+                .withTableName("item")
+                .usingGeneratedKeyColumns("id");
+              //  .usingColumns("item_name", "price", quantity); //생략 가능
     }
 
     @Override
     public Item save(Item item) {
-        String sql = "insert into item (item_name, price, quantity) " +
-                "values (:itemName, :price, :quantity)";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        SqlParameterSource param = new BeanPropertySqlParameterSource(item);
-        //객체 필드 값 기반으로 파라미터를 만든다. 이걸 사용할 수 있다면 이게 좋다고 한다.
-
-        template.update(sql, param, keyHolder);
-
-        long key = keyHolder.getKey().longValue();
-        item.setId(key);
+        BeanPropertySqlParameterSource param = new BeanPropertySqlParameterSource(item);
+        Number key = jdbcInsert.executeAndReturnKey(param);
+        item.setId(key.longValue());
         return item;
     }
 
