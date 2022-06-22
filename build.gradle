@@ -8,6 +8,9 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+//버전 오륲
+ext["hibernate.version"] = "5.6.5.Final"
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -36,6 +39,7 @@ dependencies {
 
 	//jpa, spring data jpa 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
 
 	//테스트에서 lombok 사용
 	testCompileOnly 'org.projectlombok:lombok'
