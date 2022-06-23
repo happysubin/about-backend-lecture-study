@@ -1,7 +1,7 @@
 package hello.itemservice.config;
 
 import hello.itemservice.repository.ItemRepository;
-import hello.itemservice.repository.jpa.JpaItemRepositoryV1;
+import hello.itemservice.repository.jpa.JpaAndQuerydslItemRepository;
 import hello.itemservice.repository.jpa.SpringDataJpaItemRepository;
 import hello.itemservice.repository.jpa.SpringDataJpaItemRepository2;
 import hello.itemservice.service.ItemService;
@@ -14,9 +14,9 @@ import javax.persistence.EntityManager;
 
 @Configuration
 @RequiredArgsConstructor
-public class SpringDataJpaConfig {
+public class QuerydslJpaConfig {
 
-    private final SpringDataJpaItemRepository springDataJpaItemRepository;
+    private final EntityManager em;
 
     @Bean
     public ItemService itemService() {
@@ -25,6 +25,6 @@ public class SpringDataJpaConfig {
 
     @Bean
     public ItemRepository itemRepository() {
-        return new SpringDataJpaItemRepository2(springDataJpaItemRepository);
+        return new JpaAndQuerydslItemRepository(em);
     }
 }

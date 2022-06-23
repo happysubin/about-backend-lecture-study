@@ -27,5 +27,4 @@ public class JpaConfig {
     public ItemRepository itemRepository() {
         return new JpaItemRepositoryV1(em);
     }
-//마이바티스 모듈이, 데이터 소스와 트랜잭션 매니저를 다 연결시켜준다.
 }

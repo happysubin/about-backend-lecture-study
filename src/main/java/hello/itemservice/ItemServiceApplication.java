@@ -2,6 +2,7 @@ package hello.itemservice;
 
 import hello.itemservice.config.*;
 import hello.itemservice.repository.ItemRepository;
+import hello.itemservice.repository.jpa.JpaAndQuerydslItemRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 
-@Import(SpringDataJpaConfig.class)
+@Import(QuerydslJpaConfig.class)
 @SpringBootApplication(scanBasePackages = "hello.itemservice.web")
 public class ItemServiceApplication {
 
