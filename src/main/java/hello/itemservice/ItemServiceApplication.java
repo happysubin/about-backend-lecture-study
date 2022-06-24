@@ -9,9 +9,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
+import javax.annotation.PostConstruct;
 
-@Import(QuerydslJpaConfig.class)
-@SpringBootApplication(scanBasePackages = "hello.itemservice.web")
+
+//@Import(JpaConfig.class)
+//@SpringBootApplication(scanBasePackages = "hello.itemservice.web")
+@SpringBootApplication(scanBasePackages = "hello.itemservice.order")
 public class ItemServiceApplication {
 
 	public static void main(String[] args) {
