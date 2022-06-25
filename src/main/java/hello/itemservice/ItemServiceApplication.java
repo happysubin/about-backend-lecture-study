@@ -14,7 +14,8 @@ import javax.annotation.PostConstruct;
 
 //@Import(JpaConfig.class)
 //@SpringBootApplication(scanBasePackages = "hello.itemservice.web")
-@SpringBootApplication(scanBasePackages = "hello.itemservice.order")
+//@SpringBootApplication(scanBasePackages = "hello.itemservice.order")
+@SpringBootApplication(scanBasePackages = "hello.itemservice.propagation")
 public class ItemServiceApplication {
 
 	public static void main(String[] args) {
