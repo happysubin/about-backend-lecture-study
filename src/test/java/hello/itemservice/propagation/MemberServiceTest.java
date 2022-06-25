@@ -58,5 +58,17 @@ class MemberServiceTest {
      * 로그 레포지토리는 롤백을 하고, 멤버 레포지토리는 커밋을 한다. 커넥션이 다르기 때문에!!!!
      */
 
+    @Test
+    void singleTx() {
+        //given
+        String username = "singleTx";
+        //when
+        memberService.joinV1(username);
+        //then: 모든 데이터가 정상 저장된다.
+        assertTrue(memberRepository.find(username).isPresent());
+        assertTrue(logRepository.find(username).isPresent());
+    }
+    //서비스 메서드에 트랜잭션 애노테이션이 걸렸으므로, 같은 커넥션을 사용한다!!!
+    //대신 서비스 객체에 트랜잭션 프록시가 적용된다. 레포지토리에는 트랜잭션 프록시가 적용되지 않는다.
 
 }
