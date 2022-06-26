@@ -71,4 +71,25 @@ class MemberServiceTest {
     //서비스 메서드에 트랜잭션 애노테이션이 걸렸으므로, 같은 커넥션을 사용한다!!!
     //대신 서비스 객체에 트랜잭션 프록시가 적용된다. 레포지토리에는 트랜잭션 프록시가 적용되지 않는다.
 
+
+
+    /**
+     * MemberService    @Transactional:ON
+     * MemberRepository @Transactional:ON
+     * LogRepository    @Transactional:ON
+     *
+     * 스프링은 @Transactional 이 적용되어 있으면 기본으로 REQUIRED 라는 전파 옵션을 사용한다.
+     */
+    @Test
+    void outerTxOn_success() {
+        //given
+        String username = "outerTxOn_success";
+
+        //when
+        memberService.joinV1(username);
+
+        //then: 모든 데이터가 정상 저장된다.
+        assertTrue(memberRepository.find(username).isPresent());
+        assertTrue(logRepository.find(username).isPresent());
+    }
 }
