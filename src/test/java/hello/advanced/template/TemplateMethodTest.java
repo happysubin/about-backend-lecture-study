@@ -55,11 +55,12 @@ public class TemplateMethodTest {
             protected void call() { log.info("비즈니스 로직1 실행");
             }
         };
-        log.info("클래스 이름1={}", template1.getClass()); template1.execute();
+        log.info("클래스 이름1={}", template1.getClass());   //클래스 이름1=class hello.advanced.template.TemplateMethodTest$1
+        template1.execute();
 
         AbstractTemplate template2 = new AbstractTemplate() {
             @Override
-            protected void call() { log.info("비즈니스 로직1 실행");
+            protected void call() { log.info("비즈니스 로직1 실행"); //클래스 이름2=class hello.advanced.template.TemplateMethodTest$2
             }
         };
         log.info("클래스 이름2={}", template2.getClass());
