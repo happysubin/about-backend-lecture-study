@@ -112,4 +112,11 @@ public class ContextV1Test {
         ContextV1 context2 = new ContextV1(() -> log.info("비즈니스 로직2 실행"));
         context2.execute();
     }
+    /**
+     * 선 조립 후 실행.
+     * Context 와 Strategy 를 한번 조립하고 나면 이후로는 Context 를 실행하기만 하면 된다.
+     * 스프링에서 의존 관계를 주입하고 요청을 받는 관계와 동일하다.
+     * 이 방식의 단점은 Context 와 Strategy 를 조립한 이후에는 전략을 변경하기가 번거롭다는 점이다.
+     * 다른 방법은?
+     */
 }
