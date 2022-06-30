@@ -1,6 +1,9 @@
 package hello.advanced.strategy;
 
-import hello.advanced.strategy.code.*;
+import hello.advanced.strategy.code.strategy.ContextV2;
+import hello.advanced.strategy.code.strategy.Strategy;
+import hello.advanced.strategy.code.strategy.StrategyLogic1;
+import hello.advanced.strategy.code.strategy.StrategyLogic2;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -44,3 +47,6 @@ public class ContextV2Test {
         context.execute(() -> log.info("비즈니스 로직2 실행"));
     }
 }
+//스프링에서는 ContextV2 와 같은 방식의 전략 패턴을 템플릿 콜백 패턴이라 한다.
+// 전략 패턴에서 Context 가 템플릿 역할을 하고, Strategy 부분이 콜백으로 넘어온다 생각하면 된다.
+//스프링에서 xx템플릿 예를 들어 TransactionTemplate, JdbcTemplate는 전부 템플릿 콜백 패턴으로 만들어져 있다.
