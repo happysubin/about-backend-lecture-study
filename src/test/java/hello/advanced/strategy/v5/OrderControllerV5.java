@@ -1,11 +1,8 @@
-package hello.advanced.app.v5;
+package hello.advanced.strategy.v5;
 
 import hello.advanced.trace.callback.TraceCallback;
 import hello.advanced.trace.callback.TraceTemplate;
 import hello.advanced.trace.logtrace.LogTrace;
-import hello.advanced.trace.template.AbstractTemplate;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,4 +30,4 @@ public class OrderControllerV5 {
     }
 }
 
-//TraceTemplate를 스프링 빈으로 등록해도 되긴 한다.
+//TraceTemplate를 스프링 빈으로 등록해도 되긴 한다. 대신 테스트할 때 스프링에 의존해서 테스트해야한다.
