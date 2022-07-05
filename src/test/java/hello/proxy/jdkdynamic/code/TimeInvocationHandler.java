@@ -19,6 +19,7 @@ public class TimeInvocationHandler implements InvocationHandler {
         log.info("TimeProxy 실행");
         long startTime = System.currentTimeMillis();
 
+        //진짜 대상 객체의 로직을 수행
         Object result = method.invoke(target, args);
 
         long endTime = System.currentTimeMillis();
