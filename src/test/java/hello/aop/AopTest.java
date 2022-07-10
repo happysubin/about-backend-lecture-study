@@ -4,6 +4,7 @@ import hello.aop.order.OrderRepository;
 import hello.aop.order.OrderService;
 import hello.aop.order.aop.AspectV1;
 import hello.aop.order.aop.AspectV2;
+import hello.aop.order.aop.AspectV3;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,8 @@ import org.springframework.context.annotation.Import;
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 
 //@Import(AspectV1.class) //@Import 주로 설정 파일을 추가할 때 사용( @Configuration )
-@Import(AspectV2.class)
+//@Import(AspectV2.class)
+@Import(AspectV3.class)
 @SpringBootTest
 public class AopTest {
 
