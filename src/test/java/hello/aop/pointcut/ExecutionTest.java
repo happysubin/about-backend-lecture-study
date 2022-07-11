@@ -167,8 +167,7 @@ public class ExecutionTest {
     @Test
     void argsMatchAll() {
         pointcut.setExpression("execution(* *(..))");
-        assertThat(pointcut.matches(helloMethod,
-                MemberServiceImpl.class)).isTrue();
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
     }
 
     //String 타입으로 시작, 숫자와 무관하게 모든 파라미터, 모든 타입 허용
