@@ -38,4 +38,6 @@ public class BeanTest {
  * bean : 스프링 전용 포인트컷 지시자, 빈의 이름으로 지정한다.
  * 스프링 빈의 이름으로 AOP 적용 여부를 지정한다. 이것은 스프링에서만 사용할 수 있는 특별한 지시자이다.
  * bean(orderService) || bean(*Repository) * 과 같은 패턴을 사용할 수 있다.
+ *
+ * 이건 잘 사용하지 않는다고..
  */
