@@ -38,8 +38,6 @@ public class ProxyCastingTest {
 
         log.info("proxy class={}", memberServiceProxy.getClass());
 
-        //JDK 동적 프록시를 구현 클래스로 캐스팅 시도 실패, ClassCastException 예외 발생
-
         //CGLIB 프록시를 구현 클래스로 캐스팅 시도 성공
         MemberServiceImpl castingMemberService = (MemberServiceImpl) memberServiceProxy;
     }
