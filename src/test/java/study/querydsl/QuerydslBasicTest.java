@@ -13,6 +13,8 @@ import study.querydsl.entity.Team;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 import static study.querydsl.entity.QMember.*;
 
@@ -58,7 +60,7 @@ public class QuerydslBasicTest {
 //    public void startQuerydsl() {
 //        //given
 //        JPAQueryFactory query = new JPAQueryFactory(em);
-//        QMember m = new QMember("m");
+//        QMember m = new QMember("m");   참고: 같은 테이블을 조인해야 하는 경우가 아니면 기본 인스턴스를 사용하자
 //
 //        Member findMember = query
 //                .select(m)
@@ -79,4 +81,29 @@ public class QuerydslBasicTest {
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
     }
+
+    @Test
+    void search() {
+        Member findMember = query.selectFrom(member)
+                .where(member.username.eq("member1").and(member.age.eq(10)))
+                .fetchOne();
+
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+        assertThat(findMember.getAge()).isEqualTo(10);
+    }
+
+    @Test
+    public void searchAndParam() {
+        List<Member> result1 = query
+                .selectFrom(member)
+                .where(member.username.eq("member1"),
+                        null, //이렇게 null이 들어가면 null을 무시한다.
+                        member.age.eq(10))
+                .fetch();
+        assertThat(result1.size()).isEqualTo(1);
+    }
+
+    /**
+     * 강의 자료에 웬만한 조건들 다 나와있으니 참고하면 될 듯.
+     */
 }
