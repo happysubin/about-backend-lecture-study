@@ -1,5 +1,6 @@
 package study.querydsl;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -132,7 +133,29 @@ public class QuerydslBasicTest {
 
 
 
+    @Test
+    public void paging1() {
+        List<Member> result = query
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1) //0부터 시작(zero index)
+                .limit(2)
+                .fetch();//최대 2건 조회
 
+        assertThat(result.size()).isEqualTo(2);
+    }
 
-
+    @Test
+    public void paging2() {
+        QueryResults<Member> queryResults = query
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetchResults(); //deprecated 되었다. 사용 x. 그냥 실습이라한거다.
+        assertThat(queryResults.getTotal()).isEqualTo(4);
+        assertThat(queryResults.getLimit()).isEqualTo(2);
+        assertThat(queryResults.getOffset()).isEqualTo(1);
+        assertThat(queryResults.getResults().size()).isEqualTo(2);
+    }
 }
