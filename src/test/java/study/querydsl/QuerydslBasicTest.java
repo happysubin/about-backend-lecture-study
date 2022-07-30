@@ -204,4 +204,40 @@ public class QuerydslBasicTest {
     //.having(item.price.gt(1000))
 
 
+    @Test
+    void join(){
+        List<Member> result = query
+                .selectFrom(member)
+                .join(member.team, team)  //join() , innerJoin() : 내부 조인(inner join)
+                .where(team.name.eq("teamA"))
+                .fetch();
+
+        assertThat(result)
+                .extracting("username")
+                .containsExactly("member1", "member2");
+    }
+
+    //leftJoin() : left 외부 조인(left outer join)
+    //rightJoin() : rigth 외부 조인(rigth outer join)
+    //JPQL의 on과 성능 최적화를 위한 fetch 조인 제공
+
+    @Test
+    void theta_join(){  //세타조인이란 연관관계 없어도 조인해버리는 것
+        em.persist(new Member("teamA"));
+        em.persist(new Member("teamB"));
+
+        List<Member> result = query
+                .select(member)
+                .from(member, team)
+                .where(member.username.eq(team.name))
+                .fetch();
+
+        assertThat(result)
+                .extracting("username")
+                .containsExactly("teamA", "teamB");
+
+        //from 절에 여러 엔티티를 선택해서 세타 조인
+        //외부조인불가능 조인 on을 사용하면 외부 조인 가능
+    }
+
 }
