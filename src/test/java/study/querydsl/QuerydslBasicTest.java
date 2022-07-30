@@ -240,4 +240,56 @@ public class QuerydslBasicTest {
         //외부조인불가능 조인 on을 사용하면 외부 조인 가능
     }
 
+    //ON절을 활용한 조인(JPA 2.1부터 지원)
+    //1. 조인대상필터링
+    //2. 연관관계없는엔티티외부조인
+
+    /**
+     * 예) 회원과 팀을 조인하면서, 팀 이름이 teamA인 팀만 조인, 회원은 모두 조회
+     * JPQL: SELECT m, t FROM Member m LEFT JOIN m.team t on t.name = 'teamA'
+     * SQL: SELECT m.*, t.* FROM Member m LEFT JOIN Team t ON m.TEAM_ID=t.id and t.name='teamA'
+     */
+
+    @Test
+    void join_on_filtering(){
+        List<Tuple> result = query
+                .select(member, team)
+                .from(member)
+                .leftJoin(member.team, team).on(team.name.eq("teamA"))
+                .fetch();
+
+        for (Tuple tuple : result) {
+            System.out.println("tuple = " + tuple); //left outer join 결과가 나타난다. 따라서 정말 외부조인이 필요할 때만 사용하자. 내부조인이면 where절로 해결하자.
+        }
+    }
+
+    /**
+     *2. 연관관계 없는 엔티티 외부 조인
+     *예)회원의 이름과 팀의 이름이 같은 대상 외부 조인
+     * JPQL: SELECT m, t FROM Member m LEFT JOIN Team t on m.username = t.name
+     * SQL: SELECT m.*, t.* FROM Member m LEFT JOIN Team t ON m.username = t.name
+     *
+     */
+
+    @Test
+    void join_on_no_relation(){ //여기서 자주 사용된다고 한다.
+        em.persist(new Member("teamA"));
+        em.persist(new Member("teamB"));
+
+        List<Tuple> result = query
+                .select(member, team)
+                .from(member)
+                .leftJoin(team).on(member.username.eq(team.name))
+                .fetch();
+
+        for (Tuple tuple : result) {
+            System.out.println("t=" + tuple);
+        }
+    }
+    /**
+     * leftJoin() 부분에 일반 조인과 다르게 엔티티 하나만 들어간다.
+     * 일반조인: leftJoin(member.team, team) on조인: from(member).leftJoin(team).on(xxx)
+     */
+
+
 }
