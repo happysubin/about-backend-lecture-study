@@ -2,6 +2,8 @@ package study.querydsl;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
+import study.querydsl.dto.MemberDto;
+import study.querydsl.dto.UserDto;
 import study.querydsl.entity.Member;
 import study.querydsl.entity.QMember;
 import study.querydsl.entity.Team;
@@ -498,4 +502,63 @@ public class QuerydslBasicTest {
 
     //참고: member.age.stringValue() 부분이 중요한데, 문자가 아닌 다른 타입들은 stringValue() 로 문자로 변환할 수 있다. 이 방법은 ENUM을 처리할 때도 자주 사용한다.
 
+
+    //결과를 DTO 반환할 때 사용
+    //다음 3가지 방법 지원
+    //프로퍼티 접근 필드 직접 접근 생성자 사용
+    @Test
+    void findDtoBySetter(){
+        List<MemberDto> result = query
+                .select(Projections.bean(MemberDto.class,
+                        member.username,
+                        member.age))
+                .from(member)
+                .fetch();
+
+        System.out.println("result = " + result);
+    }
+
+    @Test
+    void findDtoByField(){
+        List<MemberDto> result = query
+                .select(Projections.fields(MemberDto.class,
+                        member.username,
+                        member.age))
+                .from(member)
+                .fetch();
+
+        System.out.println("result = " + result);
+    } //private에 접근 불가능한데 리플렉션 기술을 사용해서 이를 해결.
+
+    @Test
+    void findUserDto(){
+
+        QMember memberSub = new QMember("memberSub");
+
+        List<UserDto> result = query
+                .select(Projections.fields(UserDto.class,
+                        member.username.as("name"),
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(memberSub.age.max())
+                                        .from(memberSub), "age"))
+                )
+                .from(member)
+                .fetch();
+
+        System.out.println("result = " + result);
+    }
+    //프로퍼티나, 필드 접근 생성 방식에서 이름이 다를 때 해결 방안 ExpressionUtils.as(source,alias) : 필드나, 서브 쿼리에 별칭 적용 username.as("memberName") : 필드에 별칭 적용
+
+    @Test
+    void findDtoByConstructor(){
+        List<MemberDto> result = query
+                .select(Projections.constructor(MemberDto.class,
+                        member.username,
+                        member.age))
+            .from(member)
+                .fetch();
+
+        System.out.println("result = " + result);
+    }
 }
