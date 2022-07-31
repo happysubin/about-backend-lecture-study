@@ -20,6 +20,15 @@ import static org.springframework.util.StringUtils.hasText;
 import static study.querydsl.entity.QMember.member;
 import static study.querydsl.entity.QTeam.team;
 
+
+//사용자 정의 구현 클래스
+//규칙: 리포지토리 인터페이스 이름 + Impl
+//스프링 데이터 JPA가 인식해서 스프링 빈으로 등록
+
+//스프링 데이터 2.x 부터는 사용자 정의 구현 클래스에 리포지토리 인터페이스 이름 + Impl 을 적용하는
+//대신에 사용자 정의 인터페이스 명 + Impl 방식도 지원한다.
+//예를 들어서 위 예제의 MemberRepositoryImpl 대신에 MemberRepositoryCustomImpl 같이 구현해도 된다.
+
 public class MemberRepositoryImpl implements MemberRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
@@ -120,3 +129,5 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
         return new PageImpl<>(content, pageable, totalCount);
     }
 }
+//참고: 정렬( Sort )은 조건이 조금만 복잡해져도 Pageable 의 Sort 기능을 사용하기 어렵다.
+// 루트 엔티티 범위를 넘어가는 동적 정렬 기능이 필요하면 스프링 데이터 페이징이 제공하는 Sort 를 사용하기 보다는 파라미터를 받아서 직접 처리하는 것을 권장한다.
