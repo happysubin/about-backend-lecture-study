@@ -666,4 +666,27 @@ public class QuerydslBasicTest {
         em.clear();
     }
     //주의: JPQL 배치와 마찬가지로, 영속성 컨텍스트에 있는 엔티티를 무시하고 DB에서 실행되기 때문에(영속성 컨텍스트와 DB가 안맞을수도 있다.) 배치 쿼리를 실행하고 나면 영속성 컨텍스트를 초기화 하는 것이 안전하다.
+
+    @Test
+    void sqlFunction(){
+        //member M으로 변경하는 replace 함수 사용
+        List<String> result = query
+                .select(Expressions.stringTemplate("function('replace', {0}, {1}, {2})", member.username, "member", "M"))
+                .from(member)
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+
+        List<String> result2 = query.select(member.username)
+                .from(member)
+                .where(member.username.eq(Expressions.stringTemplate("function('lower', {0})",
+                        member.username))).fetch();
+        for (String s : result2) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    //lower 같은 ansi 표준 함수들은 querydsl이 상당부분 내장하고 있다. 따라서 다음과 같이 처리해도 결과는 같다. .where(member.username.eq(member.username.lower()))
 }
