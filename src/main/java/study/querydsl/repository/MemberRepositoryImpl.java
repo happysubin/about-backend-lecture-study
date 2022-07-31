@@ -96,17 +96,27 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
         //페이지 시작이면서 컨텐츠 사이즈가 페이지 사이즈보다 작을 때
         //마지막 페이지 일 때 (offset + 컨텐츠 사이즈를 더해서 전체 사이즈 구함)
 
-        JPAQuery<Member> countQuery = queryFactory
-                .select(member)
-                .from(member)
-                .leftJoin(member.team, team)
-                .where(usernameEq(condition.getUsername()),
-                        teamNameEq(condition.getTeamName()),
-                        ageGoe(condition.getAgeGoe()),
-                        ageLoe(condition.getAgeLoe()));
+//        JPAQuery<Member> countQuery = queryFactory
+//                .select(member)
+//                .from(member)
+//                .leftJoin(member.team, team)
+//                .where(usernameEq(condition.getUsername()),
+//                        teamNameEq(condition.getTeamName()),
+//                        ageGoe(condition.getAgeGoe()),
+//                        ageLoe(condition.getAgeLoe()));
 
         //return new PageImpl<>(content, pageable, total);  // 내용 쿼리과 전체 카운트 쿼리를 읽기 좋게 분리
 
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+        //이렇게 카운트 쿼리를 작성해야 한다.
+        Long totalCount = queryFactory
+                .select(member.count())
+                .from(member)
+                .fetchOne();
+        System.out.println("totalCount = " + totalCount);
+
+        //return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+
+
+        return new PageImpl<>(content, pageable, totalCount);
     }
 }
