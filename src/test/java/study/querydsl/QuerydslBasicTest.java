@@ -17,6 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.dto.MemberDto;
+import study.querydsl.dto.MemberDtoV2;
+import study.querydsl.dto.QMemberDtoV2;
 import study.querydsl.dto.UserDto;
 import study.querydsl.entity.Member;
 import study.querydsl.entity.QMember;
@@ -561,4 +563,18 @@ public class QuerydslBasicTest {
 
         System.out.println("result = " + result);
     }
+
+
+    @Test
+    void findDtoByQueryProjection(){
+        List<MemberDtoV2> result = query
+                .select(new QMemberDtoV2(member.username, member.age))
+                .from(member)
+                .fetch();
+
+        System.out.println("result = " + result);
+    }
+    //제일 좋은 방법. 단점이 존재하긴함.
+    //이 방법은 컴파일러로 타입을 체크할 수 있으므로 가장 안전한 방법이다.
+    // 다만 DTO에 QueryDSL 어노테이션을 유지해야 하는 점과 DTO까지 Q 파일을 생성해야 하는 단점이 있다.
 }
