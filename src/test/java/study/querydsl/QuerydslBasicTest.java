@@ -1,9 +1,12 @@
 package study.querydsl;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -44,7 +47,7 @@ public class QuerydslBasicTest {
     JPAQueryFactory query;
 
     @BeforeEach
-    public void beforeEach(){
+    public void beforeEach() {
         query = new JPAQueryFactory(em);
         Team teamA = new Team("teamA");
         Team teamB = new Team("teamB");
@@ -126,7 +129,7 @@ public class QuerydslBasicTest {
      */
 
     @Test
-    public void sort(){
+    public void sort() {
         em.persist(new Member(null, 100));
         em.persist(new Member("member5", 100));
         em.persist(new Member("member6", 100));
@@ -145,7 +148,6 @@ public class QuerydslBasicTest {
         assertThat(member6.getUsername()).isEqualTo("member6");
         assertThat(memberNull.getUsername()).isNull();
     }
-
 
 
     @Test
@@ -175,7 +177,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    void aggregation(){
+    void aggregation() {
         List<Tuple> result = query.select(
                         member.count(),
                         member.age.sum(),
@@ -196,7 +198,7 @@ public class QuerydslBasicTest {
     //실무에서는 tuple 보다는 dto를 직접 뽑는다고 한다.
 
     @Test
-    public void group() throws Exception{
+    public void group() throws Exception {
         List<Tuple> result = query
                 .select(team.name, member.age.avg())
                 .from(member)
@@ -218,7 +220,7 @@ public class QuerydslBasicTest {
 
 
     @Test
-    void join(){
+    void join() {
         List<Member> result = query
                 .selectFrom(member)
                 .join(member.team, team)  //join() , innerJoin() : 내부 조인(inner join)
@@ -235,7 +237,7 @@ public class QuerydslBasicTest {
     //JPQL의 on과 성능 최적화를 위한 fetch 조인 제공
 
     @Test
-    void theta_join(){  //세타조인이란 연관관계 없어도 조인해버리는 것
+    void theta_join() {  //세타조인이란 연관관계 없어도 조인해버리는 것
         em.persist(new Member("teamA"));
         em.persist(new Member("teamB"));
 
@@ -264,7 +266,7 @@ public class QuerydslBasicTest {
      */
 
     @Test
-    void join_on_filtering(){
+    void join_on_filtering() {
         List<Tuple> result = query
                 .select(member, team)
                 .from(member)
@@ -277,15 +279,14 @@ public class QuerydslBasicTest {
     }
 
     /**
-     *2. 연관관계 없는 엔티티 외부 조인
-     *예)회원의 이름과 팀의 이름이 같은 대상 외부 조인
+     * 2. 연관관계 없는 엔티티 외부 조인
+     * 예)회원의 이름과 팀의 이름이 같은 대상 외부 조인
      * JPQL: SELECT m, t FROM Member m LEFT JOIN Team t on m.username = t.name
      * SQL: SELECT m.*, t.* FROM Member m LEFT JOIN Team t ON m.username = t.name
-     *
      */
 
     @Test
-    void join_on_no_relation(){ //여기서 자주 사용된다고 한다.
+    void join_on_no_relation() { //여기서 자주 사용된다고 한다.
         em.persist(new Member("teamA"));
         em.persist(new Member("teamB"));
 
@@ -299,6 +300,7 @@ public class QuerydslBasicTest {
             System.out.println("t=" + tuple);
         }
     }
+
     /**
      * leftJoin() 부분에 일반 조인과 다르게 엔티티 하나만 들어간다.
      * 일반조인: leftJoin(member.team, team) on조인: from(member).leftJoin(team).on(xxx)
@@ -308,7 +310,7 @@ public class QuerydslBasicTest {
     EntityManagerFactory emf;
 
     @Test
-    void noFetchJoin(){
+    void noFetchJoin() {
         em.flush();
         em.clear();
 
@@ -322,7 +324,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    void useFetchJoin(){
+    void useFetchJoin() {
         em.flush();
         em.clear();
 
@@ -346,7 +348,7 @@ public class QuerydslBasicTest {
      * 나이가 가장 많은 회원 조회
      */
     @Test
-    void subQuery(){
+    void subQuery() {
 
         QMember memberSub = new QMember("memberSub");
 
@@ -360,10 +362,10 @@ public class QuerydslBasicTest {
     }
 
     /**
-     *나이가 평균 나이 이상인 회원
+     * 나이가 평균 나이 이상인 회원
      */
     @Test
-    void subQueryGoe(){
+    void subQueryGoe() {
         QMember memberSub = new QMember("memberSub");
         List<Member> result = query.selectFrom(member)
                 .where(member.age.goe(
@@ -372,7 +374,7 @@ public class QuerydslBasicTest {
                                 .from(memberSub)
                 )).fetch();
 
-        assertThat(result).extracting("age").containsExactly(30,40);
+        assertThat(result).extracting("age").containsExactly(30, 40);
     }
 
     /**
@@ -380,7 +382,7 @@ public class QuerydslBasicTest {
      */
 
     @Test
-    void subQueryIn(){
+    void subQueryIn() {
         QMember memberSub = new QMember("memberSub");
 
         List<Member> result = query
@@ -390,13 +392,13 @@ public class QuerydslBasicTest {
                                 .select(memberSub.age)
                                 .from(memberSub)
                                 .where(memberSub.age.gt(10))
-                )) .fetch();
+                )).fetch();
 
         assertThat(result).extracting("age").containsExactly(20, 30, 40);
     }
 
     @Test
-    void selectSubQuery(){
+    void selectSubQuery() {
 
         QMember memberSub = new QMember("memberSub");
 
@@ -419,17 +421,16 @@ public class QuerydslBasicTest {
      * JPA JPQL 서브쿼리의 한계점으로 from 절의 서브쿼리(인라인 뷰)는 지원하지 않는다. 당연히 Querydsl 도 지원하지 않는다.
      * 하이버네이트 구현체를 사용하면 select 절의 서브쿼리는 지원한다. Querydsl도 하이버네이트 구현체를 사용하면 select 절의 서브쿼리를 지원한다.
      * select 절, where 절에서 사용. from 절에서는 사용 불가.
-     *
+     * <p>
      * from 절의 서브쿼리 해결방안
      * 1. 서브쿼리를 join으로 변경한다. (가능한 상황도 있고, 불가능한 상황도 있다.)
      * 2. 애플리케이션에서 쿼리를 2번 분리해서 실행한다.
      * 3. nativeSQL을 사용한다.
-     *
      */
 
 
     @Test
-    void caseV1(){
+    void caseV1() {
         List<String> result = query.from(member)
                 .select(member.age
                         .when(10).then("열살")
@@ -443,7 +444,7 @@ public class QuerydslBasicTest {
 
     //v1 보다 복잡한 경우
     @Test
-    void caseV2(){
+    void caseV2() {
         List<String> result = query
                 .select(new CaseBuilder() //복잡한 경우에는 이것을 사용
                         .when(member.age.between(0, 20)).then("0~20살")
@@ -458,7 +459,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    void caseV3(){
+    void caseV3() {
         NumberExpression<Integer> rankPath = new CaseBuilder()
                 .when(member.age.between(0, 20)).then(2)
                 .when(member.age.between(21, 30)).then(1)
@@ -474,14 +475,15 @@ public class QuerydslBasicTest {
             String username = tuple.get(member.username);
             Integer age = tuple.get(member.age);
             Integer rank = tuple.get(rankPath);
-            System.out.println("username = " + username + " age = " + age + " rank = " + rank); }
+            System.out.println("username = " + username + " age = " + age + " rank = " + rank);
+        }
     }
     //디비는 그룹핑, 필터링 정말 최소한으로. 이런 전환하고 바꾸는 로직은 데베 말고 애플리케이션에서 진행하자.
 
 
     //상수가 필요하면 Expressions.constant(xxx) 사용
     @Test
-    void constant(){
+    void constant() {
         List<Tuple> result = query
                 .select(member.username, Expressions.constant("A"))
                 .from(member)
@@ -492,7 +494,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    void concat(){
+    void concat() {
         String result = query
                 .select(member.username.concat("_").concat(member.age.stringValue()))
                 .from(member)
@@ -509,7 +511,7 @@ public class QuerydslBasicTest {
     //다음 3가지 방법 지원
     //프로퍼티 접근 필드 직접 접근 생성자 사용
     @Test
-    void findDtoBySetter(){
+    void findDtoBySetter() {
         List<MemberDto> result = query
                 .select(Projections.bean(MemberDto.class,
                         member.username,
@@ -521,7 +523,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    void findDtoByField(){
+    void findDtoByField() {
         List<MemberDto> result = query
                 .select(Projections.fields(MemberDto.class,
                         member.username,
@@ -533,7 +535,7 @@ public class QuerydslBasicTest {
     } //private에 접근 불가능한데 리플렉션 기술을 사용해서 이를 해결.
 
     @Test
-    void findUserDto(){
+    void findUserDto() {
 
         QMember memberSub = new QMember("memberSub");
 
@@ -553,12 +555,12 @@ public class QuerydslBasicTest {
     //프로퍼티나, 필드 접근 생성 방식에서 이름이 다를 때 해결 방안 ExpressionUtils.as(source,alias) : 필드나, 서브 쿼리에 별칭 적용 username.as("memberName") : 필드에 별칭 적용
 
     @Test
-    void findDtoByConstructor(){
+    void findDtoByConstructor() {
         List<MemberDto> result = query
                 .select(Projections.constructor(MemberDto.class,
                         member.username,
                         member.age))
-            .from(member)
+                .from(member)
                 .fetch();
 
         System.out.println("result = " + result);
@@ -566,7 +568,7 @@ public class QuerydslBasicTest {
 
 
     @Test
-    void findDtoByQueryProjection(){
+    void findDtoByQueryProjection() {
         List<MemberDtoV2> result = query
                 .select(new QMemberDtoV2(member.username, member.age))
                 .from(member)
@@ -577,4 +579,61 @@ public class QuerydslBasicTest {
     //제일 좋은 방법. 단점이 존재하긴함.
     //이 방법은 컴파일러로 타입을 체크할 수 있으므로 가장 안전한 방법이다.
     // 다만 DTO에 QueryDSL 어노테이션을 유지해야 하는 점과 DTO까지 Q 파일을 생성해야 하는 단점이 있다.
+
+
+    //동적 쿼리를 해결하는 두가지 방식
+    //BooleanBuilder
+    //Where 다중 파라미터 사용
+    @Test
+    void 동적쿼리_BooleanBuilder() {
+        String usernameParam = "member1";
+        Integer ageParam = 10;
+        List<Member> result = searchMemberV1(usernameParam, ageParam);
+        Assertions.assertThat(result.size()).isEqualTo(1);
+    }
+
+    private List<Member> searchMemberV1(String usernameCond, Integer ageCond) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (usernameCond != null) {
+            builder.and(member.username.eq(usernameCond));
+        }
+        if (ageCond != null) {
+            builder.and(member.age.eq(ageCond));
+        }
+
+        return query
+                .selectFrom(member)
+                .where(builder)
+                .fetch();
+    }
+
+    //실무에서 이 방법을 많이 사용한다고 하신다.
+    @Test
+    void 동적쿼리_WhereParam(){ 
+        String usernameParam = "member1";
+        Integer ageParam = 10;
+        List<Member> result = searchMemberV2(usernameParam, ageParam);
+        Assertions.assertThat(result.size()).isEqualTo(1);
+    }
+
+    private List<Member> searchMemberV2(String usernameCond, Integer ageCond) {
+        return query
+                .selectFrom(member)
+                .where(usernameEq(usernameCond), ageEq(ageCond))
+                .fetch();
+    }
+
+    private Predicate ageEq(Integer ageCond) {
+        return ageCond != null ? member.age.eq(ageCond) : null;
+    }
+
+    private BooleanExpression usernameEq(String usernameCond) {
+        return usernameCond != null ? member.username.eq(usernameCond) : null;
+    }
+    //where 조건에 null 값은 무시된다. 메서드를 다른 쿼리에서도 재활용 할 수 있다. 쿼리 자체의 가독성이 높아진다.
+
+    //이렇게 조합도 가능하다.
+    private BooleanExpression allEq(String usernameCond, Integer ageCond) {
+        return usernameEq(usernameCond).and(ageEq(ageCond));
+    }
 }
