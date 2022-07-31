@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.dto.MemberDto;
 import study.querydsl.dto.MemberDtoV2;
@@ -632,8 +633,37 @@ public class QuerydslBasicTest {
     }
     //where 조건에 null 값은 무시된다. 메서드를 다른 쿼리에서도 재활용 할 수 있다. 쿼리 자체의 가독성이 높아진다.
 
-    //이렇게 조합도 가능하다.
+    //이렇게 조합도 가능하다. 이렇게 조건을 빼는 것이 굉장히 좋다!!! 이렇게 하자.
     private BooleanExpression allEq(String usernameCond, Integer ageCond) {
         return usernameEq(usernameCond).and(ageEq(ageCond));
     }
+
+    @Test
+    void bulkUpdate(){
+        long count = query
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
+
+        em.flush();
+        em.clear();
+        //벌크 연산이 나가면 초기화.
+
+        //한 살 더하기
+        long count2 = query
+                .update(member)
+                .set(member.age, member.age.add(1))
+                .execute();
+        em.flush();
+        em.clear();
+        //대량삭제
+        long count3 = query
+                .delete(member)
+                .where(member.age.gt(18))
+                .execute();
+        em.flush();
+        em.clear();
+    }
+    //주의: JPQL 배치와 마찬가지로, 영속성 컨텍스트에 있는 엔티티를 무시하고 DB에서 실행되기 때문에(영속성 컨텍스트와 DB가 안맞을수도 있다.) 배치 쿼리를 실행하고 나면 영속성 컨텍스트를 초기화 하는 것이 안전하다.
 }
