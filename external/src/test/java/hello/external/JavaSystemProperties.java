@@ -22,5 +22,4 @@ public class JavaSystemProperties {
         log.info("username={}", username);
         log.info("password={}", password);
     }
-
 }
