@@ -7,7 +7,7 @@ my:
       max-connection: 1
       timeout: 60s
       options: LOCAL, CACHE
----
+--- # 구분
 spring:
   config:
     activate:
@@ -21,7 +21,7 @@ my:
       maxConnection: 10
       timeout: 60s
       options: DEV, CACHE
----
+--- # 구분
 spring:
   config:
     activate:
