@@ -1,5 +1,16 @@
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+        exclude: "env,beans"
+
+#web 에 모든 엔드포인트를 노출하지만 env , beans 는 제외한다.
+#엔드포인트를 활성화 한다는 것은 해당 기능 자체를 사용할지 말지 on, off를 선택하는 것이다. 엔드포인트는 대부분 기본으로 활성화
+#엔드포인트를 노출하는 것은 활성화된 엔드포인트를 HTTP에 노출할지 아니면 JMX에 노출할지 선택하는 것이다.
