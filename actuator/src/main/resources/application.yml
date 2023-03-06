@@ -33,8 +33,11 @@ info:
     company: sb
 
 #엔드포인트를 노출하는 것은 활성화된 엔드포인트를 HTTP에 노출할지 아니면 JMX에 노출할지 선택하는 것이다.
-
-
+server:
+  tomcat:
+    mbeanregistry:
+      enabled: true
+      
 logging:
   level:
     hello.controller: debug
