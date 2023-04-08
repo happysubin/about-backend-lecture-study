@@ -1,5 +1,5 @@
 server:
-  port: 0 # 랜덤 포트를 사용하겠다.
+  port: 8081 # 랜덤 포트를 사용하겠다.
 
 spring:
   application:
@@ -9,7 +9,7 @@ eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
   client:
-    register-with-eureka: true
+    register-with-eureka: false
     fetch-registry: true # Eureka 서버로부터 인스턴스들의 정보를 주기적으로 가져오겠다고 설정.
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka #서버가 가지고 있는 위치 값 지정
