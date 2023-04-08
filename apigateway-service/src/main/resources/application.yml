@@ -2,11 +2,13 @@ server:
   port: 8080
 
 eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: true
+    fetch-registry: true # Eureka 서버로부터 인스턴스들의 정보를 주기적으로 가져오겠다고 설정.
     service-url:
-      defaultZonde: http://localhost:8761/eureka
+      defaultZone: http://127.0.0.1:8761/eureka #서버가 가지고 있는 위치 값 지정
 
 spring:
   application:
@@ -15,7 +17,7 @@ spring:
     gateway:
       routes:
         - id: user-service
-          uri: http://localhost:8081
+          uri: lb://USER-SERVICE #유레카에 등록되는 서버 인스턴스 이름
           predicates: #조건절
           - Path=/first-service/**
           filters:
@@ -29,7 +31,7 @@ spring:
                  postLogger: true
 
         - id: second-service
-          uri: http://localhost:8082
+          uri: lb://MY-SECOND-SERVICE
           predicates: #조건절
             - Path=/second-service/**
       default-filters:
