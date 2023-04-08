@@ -19,4 +19,9 @@ public class UserController {
         System.out.println("header = " + header);
         return header;
     }
+
+    @GetMapping("/check")
+    public String check (){
+        return "check";
+    }
 }
