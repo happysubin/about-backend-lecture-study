@@ -11,16 +11,19 @@ eureka:
 spring:
   application:
     name: apigateway-service
-#  cloud:
-#    gateway:
-#      routes:
-#        - id: user-service
-#          uri: http://localhost:8081
-#          predicates: #조건절
-#          - Path=/first-service/**
-#        - id: second-service
-#          uri: http://localhost:8082
-#          predicates: #조건절
-#            - Path=/second-service/**
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://localhost:8081
+          predicates: #조건절
+          - Path=/first-service/**
+          filters:
+            - AddRequestHeader=first-request, first-requests-header2
+            - AddRequestHeader=first-response, first-responses-header2
+        - id: second-service
+          uri: http://localhost:8082
+          predicates: #조건절
+            - Path=/second-service/**
 
 #Netty가 WAS로 동작함. 비동기를 위함.
