@@ -3,18 +3,20 @@ package com.example.userservice.presentation;
 import com.example.userservice.application.UserRequestDto;
 import com.example.userservice.application.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/first-service")
+@RequestMapping("/user-service")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    @PostMapping("/users")
+     @PostMapping("/users")
     public String createUser(@RequestBody RequestUser request){
-        UserRequestDto userDto= request.toDto();
+        UserRequestDto userDto= request.toDto(passwordEncoder);
         userService.registerUser(userDto);
         return "create user method is called";
     }

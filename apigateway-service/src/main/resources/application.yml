@@ -19,7 +19,7 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE #유레카에 등록되는 서버 인스턴스 이름
           predicates: #조건절
-          - Path=/first-service/**
+          - Path=/user-service/**
           filters:
 #            - AddRequestHeader=first-request, first-requests-header2
 #            - AddRequestHeader=first-response, first-responses-header2
