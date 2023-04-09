@@ -2,12 +2,14 @@ package com.example.userservice.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
 public class User {
 
     @Id
