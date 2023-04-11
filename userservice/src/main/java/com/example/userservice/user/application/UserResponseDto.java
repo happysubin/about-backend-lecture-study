@@ -1,7 +1,7 @@
-package com.example.userservice.application;
+package com.example.userservice.user.application;
 
 
-import com.example.userservice.domain.User;
+import com.example.userservice.user.domain.Users;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +18,7 @@ public class UserResponseDto {
 
     private List<ResponseOrder> orders;
 
-    public static UserResponseDto of (User user){
+    public static UserResponseDto of (Users user){
         return new UserResponseDto(user.getEmail(), user.getName(), user.getUserId(), new ArrayList<>());
     }
 

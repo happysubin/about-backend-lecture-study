@@ -1,8 +1,8 @@
-package com.example.userservice.presentation;
+package com.example.userservice.user.presentation;
 
-import com.example.userservice.application.UserRequestDto;
-import com.example.userservice.application.UserResponseDto;
-import com.example.userservice.application.UserService;
+import com.example.userservice.user.application.UserRequestDto;
+import com.example.userservice.user.application.UserResponseDto;
+import com.example.userservice.user.application.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user-service")
 @RequiredArgsConstructor
 public class UserController {
 

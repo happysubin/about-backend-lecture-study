@@ -1,6 +1,6 @@
-package com.example.userservice.presentation;
+package com.example.userservice.user.presentation;
 
-import com.example.userservice.application.UserRequestDto;
+import com.example.userservice.user.application.UserRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

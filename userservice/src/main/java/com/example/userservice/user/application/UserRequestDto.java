@@ -1,10 +1,9 @@
-package com.example.userservice.application;
+package com.example.userservice.user.application;
 
-import com.example.userservice.domain.User;
+import com.example.userservice.user.domain.Users;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.UUID;
 
 
@@ -24,8 +23,8 @@ public class UserRequestDto {
         this.encryptedPwd = encryptedPwd;
     }
 
-    public User toEntity() {
-        return User.builder()
+    public Users toEntity() {
+        return Users.builder()
                 .userId(userId)
                 .email(email)
                 .encryptedPwd(encryptedPwd)

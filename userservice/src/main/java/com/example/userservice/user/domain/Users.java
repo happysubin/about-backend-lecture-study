@@ -1,4 +1,4 @@
-package com.example.userservice.domain;
+package com.example.userservice.user.domain;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue
@@ -29,7 +29,7 @@ public class User {
     private String encryptedPwd;
 
     @Builder
-    public User(String email, String name, String userId, String encryptedPwd) {
+    public Users(String email, String name, String userId, String encryptedPwd) {
         this.email = email;
         this.name = name;
         this.userId = userId;

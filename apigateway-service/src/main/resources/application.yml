@@ -16,19 +16,45 @@ spring:
   cloud:
     gateway:
       routes:
+#        - id: user-service
+#          uri: lb://USER-SERVICE #유레카에 등록되는 서버 인스턴스 이름
+#          predicates: #조건절
+#          - Path=/user-service/**
+#          filters:
+##            - AddRequestHeader=first-request, first-requests-header2
+##            - AddRequestHeader=first-response, first-responses-header2
+#             - name: CustomFilter
+#             - name: LoggingFilter
+#               args:
+#                 baseMessage: Hi, there.
+#                 preLogger: true
+#                 postLogger: true
         - id: user-service
           uri: lb://USER-SERVICE #유레카에 등록되는 서버 인스턴스 이름
           predicates: #조건절
-          - Path=/user-service/**
+            - Path=/user-service/login
+            - Method=POST
           filters:
-#            - AddRequestHeader=first-request, first-requests-header2
-#            - AddRequestHeader=first-response, first-responses-header2
-             - name: CustomFilter
-             - name: LoggingFilter
-               args:
-                 baseMessage: Hi, there.
-                 preLogger: true
-                 postLogger: true
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment} # 앞의 형식을 뒤 형식으로 바꾸겠다.
+
+        - id: user-service
+          uri: lb://USER-SERVICE #유레카에 등록되는 서버 인스턴스 이름
+          predicates: #조건절
+            - Path=/user-service/users
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment} # 앞의 형식을 뒤 형식으로 바꾸겠다.
+        - id: user-service
+          uri: lb://USER-SERVICE #유레카에 등록되는 서버 인스턴스 이름
+          predicates: #조건절
+            - Path=/user-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment} # 앞의 형식을 뒤 형식으로 바꾸겠다.
+            - AuthorizationHeaderFilter
 
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
@@ -38,6 +64,8 @@ spring:
           uri: lb://ORDER-SERVICE
           predicates: #조건절
             - Path=/order-service/**
+
+
       default-filters:
         - name: GlobalFilter
           args:
@@ -47,3 +75,7 @@ spring:
 
 
 #Netty가 WAS로 동작함. 비동기를 위함.
+
+token:
+  expiration_time: 1239012748914612983
+  secret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1

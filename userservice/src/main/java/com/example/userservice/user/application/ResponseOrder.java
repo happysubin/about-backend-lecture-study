@@ -1,4 +1,4 @@
-package com.example.userservice.application;
+package com.example.userservice.user.application;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
