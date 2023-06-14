@@ -1,0 +1,49 @@
+server:
+  port: 8088
+
+logging:
+  level:
+    org.springframework: DEBUG #많은 로그들을 확인 가능
+
+
+#spring:
+#
+#  mvc:
+#
+#    pathmatch:
+#
+#      matching-strategy: ant_path_matcher 이 부분으로
+##    Failed to start bean 'documentationPluginsBootstrapper'; nested exception is java.lang.NullPointerException
+#     에러를 해결했다
+
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/api
+    username: sa
+    password :
+      driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+
+  security:
+    user:
+      name: username
+      password: password   #시큐리티가 설정한 것 말고 우리가 직접 설정
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  messages:
+    basename: messages
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

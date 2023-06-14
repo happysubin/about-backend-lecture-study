@@ -1,0 +1,73 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'springapi'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	//xml format으로 데이터를 반환하기 위해 필요한 라이브러리
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.11.3'
+	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.11.3'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.3'
+
+
+	//hateoas 사용
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+
+
+	//swagger을 편하게 적용하기
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+
+	//actuator 사용
+
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
+	//implementatio group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.4.1'
+	//compile 는 삭제되었으므로 implementation을 사용
+	//actuator은 안된다... 일단 넘어가자 충돌이 일어나는 듯.
+
+
+	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-rest-hal-browser
+	implementation group: 'org.springframework.data', name: 'spring-data-rest-hal-browser', version: '3.3.9.RELEASE'
+
+	//스프링 시큐리티
+	/**
+	 * 적용하면 메소드에 권한 인증이 걸린다.
+	 * postman에서 Authorization에서 Basic Auth 로 들어가서
+	 *
+	 * 스프링 시큐리티가 생성한 아래 비번과 user을 로그인에 넣어야 한다.
+	 * 49497494-6f56-45c6-9dfe-9b99848fe9dd
+	 * 이렇게 해야지 api 사용이 가능하다.
+	 */
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
