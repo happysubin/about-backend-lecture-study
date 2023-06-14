@@ -1,0 +1,81 @@
+server:
+  port: 8080
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true # Eureka 서버로부터 인스턴스들의 정보를 주기적으로 가져오겠다고 설정.
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka #서버가 가지고 있는 위치 값 지정
+
+spring:
+  application:
+    name: apigateway-service
+  cloud:
+    gateway:
+      routes:
+#        - id: user-service
+#          uri: lb://USER-SERVICE #유레카에 등록되는 서버 인스턴스 이름
+#          predicates: #조건절
+#          - Path=/user-service/**
+#          filters:
+##            - AddRequestHeader=first-request, first-requests-header2
+##            - AddRequestHeader=first-response, first-responses-header2
+#             - name: CustomFilter
+#             - name: LoggingFilter
+#               args:
+#                 baseMessage: Hi, there.
+#                 preLogger: true
+#                 postLogger: true
+        - id: user-service
+          uri: lb://USER-SERVICE #유레카에 등록되는 서버 인스턴스 이름
+          predicates: #조건절
+            - Path=/user-service/login
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment} # 앞의 형식을 뒤 형식으로 바꾸겠다.
+
+        - id: user-service
+          uri: lb://USER-SERVICE #유레카에 등록되는 서버 인스턴스 이름
+          predicates: #조건절
+            - Path=/user-service/users
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment} # 앞의 형식을 뒤 형식으로 바꾸겠다.
+        - id: user-service
+          uri: lb://USER-SERVICE #유레카에 등록되는 서버 인스턴스 이름
+          predicates: #조건절
+            - Path=/user-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment} # 앞의 형식을 뒤 형식으로 바꾸겠다.
+            - AuthorizationHeaderFilter
+
+        - id: catalog-service
+          uri: lb://CATALOG-SERVICE
+          predicates: #조건절
+            - Path=/catalog-service/**
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates: #조건절
+            - Path=/order-service/**
+
+
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway GlobalFilter
+            preLogger: true
+            postLogger: true
+
+
+#Netty가 WAS로 동작함. 비동기를 위함.
+
+token:
+  expiration_time: 1239012748914612983
+  secret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
