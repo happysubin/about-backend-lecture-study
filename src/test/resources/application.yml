@@ -1,0 +1,21 @@
+spring:
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/jpashop
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        show_sql: true
+
+#스프링 부트는 datasource 설정이 없다면 기본적으로 메모리 디비를 사용. dirver-class도 등록된 라이브러리를 찾아준다.
+# 추가로 dd-auto도 create-drop ahemfh ehdwkr. 사실은 별도의 설정이 필요없다.
+
+  logging:
+    level:
+      org.hibernate.SQL:debug
