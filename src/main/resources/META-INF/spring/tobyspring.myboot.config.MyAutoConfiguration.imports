@@ -1,0 +1,6 @@
+tobyspring.myboot.config.autoconfig.DataSourceConfig
+tobyspring.myboot.config.autoconfig.DispatcherServletConfig
+tobyspring.myboot.config.autoconfig.TomcatWebServerConfig
+tobyspring.myboot.config.autoconfig.JettyWebServerConfig
+tobyspring.myboot.config.autoconfig.PropertyPlaceholderConfig
+tobyspring.myboot.config.autoconfig.PropertyPostProcessorConfig
