@@ -1,5 +1,7 @@
-package io.springbatch.springbatchlecture;
+package io.springbatch.springbatchlecture.part3_domain_basic.job;
 
+import io.springbatch.springbatchlecture.part3_domain_basic.step.CustomTasklet;
+import io.springbatch.springbatchlecture.part3_domain_basic.step.ExceptionTasklet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -62,10 +64,7 @@ public class JobConfiguration {
     @Bean
     public Step step2() {
         return stepBuilderFactory.get("step2")
-                .tasklet((StepContribution contribution, ChunkContext chunkContext) -> {
-                    System.out.println("step2 was executed");
-                    return RepeatStatus.FINISHED;
-                })
+                .tasklet(new ExceptionTasklet())
                 .build();
     }
 }
