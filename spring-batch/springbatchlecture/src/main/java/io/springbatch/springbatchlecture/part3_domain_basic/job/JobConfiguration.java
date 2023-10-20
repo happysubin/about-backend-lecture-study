@@ -64,7 +64,7 @@ public class JobConfiguration {
     @Bean
     public Step step2() {
         return stepBuilderFactory.get("step2")
-                .tasklet(new ExceptionTasklet())
+                .tasklet(new CustomTasklet())
                 .build();
     }
 }
