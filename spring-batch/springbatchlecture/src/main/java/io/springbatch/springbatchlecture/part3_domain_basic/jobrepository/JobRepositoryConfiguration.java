@@ -34,6 +34,7 @@ public class JobRepositoryConfiguration {
     public Step jRBean1() {
         return stepBuilderFactory.get("rStep1")
                 .tasklet((StepContribution contribution, ChunkContext chunkContext) -> {
+                    Thread.sleep(3000);
                     System.out.println("rStep1 executed");
                     return RepeatStatus.FINISHED;
                 })
