@@ -6,5 +6,5 @@ spring:
   batch:
     jdbc:
       initialize-schema: ALWAYS
-    job:
-      enabled: false #스프링이 아닌 우리 코드로 실행하겠다는 의미
+#    job:
+#      enabled: false #스프링이 아닌 우리 코드로 실행하겠다는 의미

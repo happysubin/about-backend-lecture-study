@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
-@ComponentScan("io.springbatch.springbatchlecture.part3_domain_basic.jobrepository")
+@ComponentScan("io.springbatch.springbatchlecture.part4_job")
 @EnableBatchProcessing
 @SpringBootApplication
 public class SpringBatchLectureApplication {
