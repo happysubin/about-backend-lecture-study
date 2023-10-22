@@ -1,4 +1,4 @@
-package io.springbatch.springbatchlecture.part4_job;
+package io.springbatch.springbatchlecture.part4_job.jobbuilderfactory;
 
 
 import lombok.RequiredArgsConstructor;
