@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
-@ComponentScan("io.springbatch.springbatchlecture.part5_step")
+@ComponentScan("io.springbatch.springbatchlecture.part5_step.taskletstep")
 @EnableBatchProcessing
 @SpringBootApplication
 public class SpringBatchLectureApplication {

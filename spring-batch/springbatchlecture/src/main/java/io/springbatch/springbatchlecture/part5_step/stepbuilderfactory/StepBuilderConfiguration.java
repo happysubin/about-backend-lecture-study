@@ -1,4 +1,4 @@
-package io.springbatch.springbatchlecture.part5_step;
+package io.springbatch.springbatchlecture.part5_step.stepbuilderfactory;
 
 import io.springbatch.springbatchlecture.part4_job.simplejob.CustomJobParametersIncrementer;
 import lombok.RequiredArgsConstructor;
