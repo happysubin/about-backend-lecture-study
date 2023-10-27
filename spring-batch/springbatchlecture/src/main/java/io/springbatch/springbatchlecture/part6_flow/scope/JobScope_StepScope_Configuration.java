@@ -10,8 +10,12 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 
 @Configuration
@@ -57,6 +61,24 @@ public class JobScope_StepScope_Configuration {
             System.out.println("message = " + message);
             System.out.println("jobExecutionContext['name'] : " + name);
             return RepeatStatus.FINISHED;
+        };
+    }
+
+    @Bean
+    ApplicationRunner applicationRunner() {
+        return (args) -> {
+            CompletableFuture
+                    .runAsync(() -> {
+                        System.out.println(Thread.currentThread().getName()); //ForkJoinPool.commonPool-worker-3 출력됨. 직접 ExecutorService를 할당할 수 있다.
+                    })
+                    .thenRun(
+                            () -> {
+                                System.out.println(Thread.currentThread().getName());
+                            }
+                    )
+                    .thenRun(() -> {
+                        System.out.println(Thread.currentThread().getName());
+                    });
         };
     }
 }
