@@ -1,4 +1,4 @@
-package io.springbatch.springbatchlecture.part7_chunk;
+package io.springbatch.springbatchlecture.part7_chunk.simple;
 
 import org.springframework.batch.item.ItemProcessor;
 
