@@ -9,6 +9,8 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 
+import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +29,7 @@ public class FlatFilesConfiguration {
 
     @Bean
     public Job job() {
-        return jobBuilderFactory.get("batchJob")
+        return jobBuilderFactory.get("batchJob1231123223")
                 .start(step1())
                 .next(step2())
                 .build();
@@ -60,18 +62,44 @@ public class FlatFilesConfiguration {
 
 
 
-    @Bean
-    public ItemReader itemReader() {
-        FlatFileItemReader<Customer> itemReader = new FlatFileItemReader<>();
-        itemReader.setResource(new ClassPathResource("/customer.csv"));
+//    @Bean
+//    public ItemReader itemReader() {
+//        FlatFileItemReader<Customer> itemReader = new FlatFileItemReader<>();
+//        itemReader.setResource(new ClassPathResource("/customer.csv"));
+//
+//        DefaultLineMapper<Customer> lineMapper = new DefaultLineMapper<>();
+//        lineMapper.setTokenizer(new DelimitedLineTokenizer());
+//        lineMapper.setFieldSetMapper(new CustomerFieldSetMapper());
+//
+//        itemReader.setLineMapper(lineMapper);
+//        itemReader.setLinesToSkip(1);
+//
+//        return itemReader;
+//    }
 
-        DefaultLineMapper<Customer> lineMapper = new DefaultLineMapper<>();
-        lineMapper.setTokenizer(new DelimitedLineTokenizer());
-        lineMapper.setFieldSetMapper(new CustomerFieldSetMapper());
+    public FlatFileItemReader itemReader() {
+        return new FlatFileItemReaderBuilder<Customer>()
+                .name("flatFile")
+                .resource(new ClassPathResource("customer.csv"))
+                .fieldSetMapper(new CustomerFieldSetMapper())
+                //.targetType(Customer.class)
+                .linesToSkip(1)
+                .delimited()
+                .delimiter(",")
+                .names("name", "year", "age")
+                .build();
+    }
 
-        itemReader.setLineMapper(lineMapper);
-        itemReader.setLinesToSkip(1);
 
-        return itemReader;
+    public FlatFileItemReader itemReader2() {
+        return new FlatFileItemReaderBuilder<Customer>()
+                .name("flatFile")
+                .resource(new ClassPathResource("customer.csv"))
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<>())
+                .targetType(Customer.class)
+                .linesToSkip(1)
+                .delimited().delimiter(",")
+                .names("name","year","age")
+                .build();
     }
 }
