@@ -12,10 +12,12 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.batch.item.file.transform.Range;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class FlatFilesConfiguration {
 
     @Bean
     public Job job() {
-        return jobBuilderFactory.get("batchJob1231123223")
+        return jobBuilderFactory.get("batchJob2123123123223")
                 .start(step1())
                 .next(step2())
                 .build();
@@ -39,8 +41,8 @@ public class FlatFilesConfiguration {
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
-                .<String, String>chunk(5)
-                .reader(itemReader())
+                .<String, String>chunk(3)
+                .reader(itemReader3())
                 .writer(new ItemWriter() {
                     @Override
                     public void write(List items) throws Exception {
@@ -101,5 +103,22 @@ public class FlatFilesConfiguration {
                 .delimited().delimiter(",")
                 .names("name","year","age")
                 .build();
+    }
+
+    public FlatFileItemReader itemReader3() {
+        return new FlatFileItemReaderBuilder<Customer>()
+                .name("flatFile")
+                .resource(new FileSystemResource("내 파일 절대 경로 csv, 상대 경로는 createRelative를 활용해야 하는 듯."))
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<>())
+                .targetType(Customer.class)
+                .linesToSkip(1)
+                .fixedLength()
+                .strict(false) //false. 파싱 예외를 잡지 않겠다
+                .addColumns(new Range(1,5))
+                .addColumns(new Range(6,9))
+                .addColumns(new Range(10,11))
+                .names("name","year","age")
+                .build();
+
     }
 }
