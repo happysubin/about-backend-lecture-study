@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
-@ComponentScan("io.springbatch.springbatchlecture.part7_chunk.stream")
+@ComponentScan("io.springbatch.springbatchlecture.part8_itemreader")
 @EnableBatchProcessing
 @SpringBootApplication
 public class SpringBatchLectureApplication {
