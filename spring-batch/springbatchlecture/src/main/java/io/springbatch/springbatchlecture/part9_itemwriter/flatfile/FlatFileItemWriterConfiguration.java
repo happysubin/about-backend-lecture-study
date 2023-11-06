@@ -39,7 +39,7 @@ public class FlatFileItemWriterConfiguration {
         return stepBuilderFactory.get("step1")
                 .<Customer, Customer>chunk(10)
                 .reader(itemReader())
-                .writer(customWriter())
+                .writer(customWriter2())
                 .allowStartIfComplete(true)
                 .build();
     }
@@ -53,6 +53,17 @@ public class FlatFileItemWriterConfiguration {
                 .delimiter("|")
                 .names(new String[]{"id", "name", "age"})
                 .append(true)
+                .build();
+    }
+
+    @Bean
+    public ItemWriter<? super Customer> customWriter2() {
+        return new FlatFileItemWriterBuilder<>()
+                .name("flatFileWriter")
+                .resource(new FileSystemResource("/Users/ansubin/Desktop/lecture-study/spring-batch/springbatchlecture/src/main/resources/result2.txt"))
+                .formatted()
+                .format("%-2d%-6s%-2d")
+                .names(new String[]{"id", "name", "age"})
                 .build();
     }
 
