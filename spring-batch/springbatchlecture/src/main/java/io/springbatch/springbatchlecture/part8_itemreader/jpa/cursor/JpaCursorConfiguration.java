@@ -1,8 +1,7 @@
-package io.springbatch.springbatchlecture.part8_itemreader.jdbc;
+package io.springbatch.springbatchlecture.part8_itemreader.jpa.cursor;
 
-import com.zaxxer.hikari.HikariConfig;
-import io.springbatch.springbatchlecture.part8_itemreader.json.Customer;
-import lombok.Data;
+
+import io.springbatch.springbatchlecture.part8_itemreader.jpa.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -10,25 +9,25 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
+import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @RequiredArgsConstructor
-public class JdbcCursorConfiguration {
+public class JpaCursorConfiguration {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    private final DataSource dataSource;
+    private final EntityManagerFactory entityManagerFactory;
 
     private int chunkSize = 10;
 
     @Bean
     public Job job() {
-        return jobBuilderFactory.get("batchJob123")
+        return jobBuilderFactory.get("batchJob")
                 .start(step1())
                 .build();
     }
@@ -45,15 +44,14 @@ public class JdbcCursorConfiguration {
 
     @Bean
     public ItemReader<? extends Member> customerItemReader() {
-        return new JdbcCursorItemReaderBuilder<Member>()
-                .name("jdbcCursorItemReader")
-                .fetchSize(chunkSize) //일반적으로 청크 사이즈와 동일하게 한다.
-                .sql("select * from member order by id")
-                .beanRowMapper(Member.class)
-                //.queryArguments("A%")
-                .dataSource(dataSource)
+        return new JpaCursorItemReaderBuilder<Member>()
+                .name("jpaCursorItemReaer")
+                .entityManagerFactory(entityManagerFactory)
+                .queryString("select m from Member m order by id")
+                //.parameterValues()
+                //.maxItemCount(chunkSize)
+                //.currentItemCount(2)
                 .build();
-
     }
 
     @Bean

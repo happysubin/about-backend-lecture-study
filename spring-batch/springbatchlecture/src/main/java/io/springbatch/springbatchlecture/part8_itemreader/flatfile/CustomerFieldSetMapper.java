@@ -1,4 +1,4 @@
-package io.springbatch.springbatchlecture.part8_itemreader;
+package io.springbatch.springbatchlecture.part8_itemreader.flatfile;
 
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;

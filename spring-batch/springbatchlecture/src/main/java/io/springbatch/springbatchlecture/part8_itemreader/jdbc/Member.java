@@ -3,7 +3,7 @@ package io.springbatch.springbatchlecture.part8_itemreader.jdbc;
 import lombok.Data;
 
 @Data
-public class Customer {
+public class Member {
 
     private Long id;
 

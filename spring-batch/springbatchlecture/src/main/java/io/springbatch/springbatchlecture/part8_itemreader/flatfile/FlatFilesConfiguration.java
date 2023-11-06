@@ -1,17 +1,15 @@
-package io.springbatch.springbatchlecture.part8_itemreader;
+package io.springbatch.springbatchlecture.part8_itemreader.flatfile;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.file.transform.Range;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +29,7 @@ public class FlatFilesConfiguration {
 
     @Bean
     public Job job() {
-        return jobBuilderFactory.get("batchJob2123123123223")
+        return jobBuilderFactory.get("batchJob")
                 .start(step1())
                 .next(step2())
                 .build();
@@ -66,10 +64,10 @@ public class FlatFilesConfiguration {
 
 //    @Bean
 //    public ItemReader itemReader() {
-//        FlatFileItemReader<Customer> itemReader = new FlatFileItemReader<>();
+//        FlatFileItemReader<Member> itemReader = new FlatFileItemReader<>();
 //        itemReader.setResource(new ClassPathResource("/customer.csv"));
 //
-//        DefaultLineMapper<Customer> lineMapper = new DefaultLineMapper<>();
+//        DefaultLineMapper<Member> lineMapper = new DefaultLineMapper<>();
 //        lineMapper.setTokenizer(new DelimitedLineTokenizer());
 //        lineMapper.setFieldSetMapper(new CustomerFieldSetMapper());
 //
@@ -84,7 +82,7 @@ public class FlatFilesConfiguration {
                 .name("flatFile")
                 .resource(new ClassPathResource("customer.csv"))
                 .fieldSetMapper(new CustomerFieldSetMapper())
-                //.targetType(Customer.class)
+                //.targetType(Member.class)
                 .linesToSkip(1)
                 .delimited()
                 .delimiter(",")

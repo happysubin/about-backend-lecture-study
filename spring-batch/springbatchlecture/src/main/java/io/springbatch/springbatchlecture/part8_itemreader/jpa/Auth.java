@@ -1,4 +1,4 @@
-package com.kakaobean.core.member.domain;
+package io.springbatch.springbatchlecture.part8_itemreader.jpa;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
