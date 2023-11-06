@@ -1,0 +1,65 @@
+package io.springbatch.springbatchlecture.part8_itemreader.jpa.paging;
+
+import io.springbatch.springbatchlecture.part8_itemreader.jpa.Member;
+import lombok.RequiredArgsConstructor;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.persistence.EntityManagerFactory;
+
+@Configuration
+@RequiredArgsConstructor
+public class JpaPagingConfiguration {
+
+    private final JobBuilderFactory jobBuilderFactory;
+    private final StepBuilderFactory stepBuilderFactory;
+    private final EntityManagerFactory entityManagerFactory;
+
+    private int chunkSize = 10;
+
+    @Bean
+    public Job job() throws Exception {
+        return jobBuilderFactory.get("batchJob129993")
+                .incrementer(new RunIdIncrementer())
+                .start(step1())
+                .build();
+    }
+
+
+    @Bean
+    public Step step1() {
+        return stepBuilderFactory.get("step1")
+                .<Member, Member>chunk(chunkSize)
+                .reader(customerItemReader())
+                .writer(customItemWriter())
+                .build();
+    }
+
+    @Bean
+    public ItemReader<? extends Member> customerItemReader() {
+        return new JpaPagingItemReaderBuilder<Member>()
+                .name("jpaPagingItemReader")
+                .entityManagerFactory(entityManagerFactory)
+                .pageSize(chunkSize)
+                .queryString("select m from Member m order by id")
+                .build();
+
+    }
+
+    @Bean
+    public ItemWriter<Member> customItemWriter() {
+        return members -> {
+            for (Member member : members) {
+                System.out.println("member = " + member);
+            }
+        };
+    }
+}

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
-@ComponentScan("io.springbatch.springbatchlecture.part8_itemreader.jdbc.paging")
+@ComponentScan("io.springbatch.springbatchlecture.part8_itemreader.jpa.paging")
 @EnableBatchProcessing
 @SpringBootApplication
 public class SpringBatchLectureApplication {
