@@ -64,10 +64,10 @@ public class FlatFilesConfiguration {
 
 //    @Bean
 //    public ItemReader itemReader() {
-//        FlatFileItemReader<Member> itemReader = new FlatFileItemReader<>();
+//        FlatFileItemReader<MemberEntity> itemReader = new FlatFileItemReader<>();
 //        itemReader.setResource(new ClassPathResource("/customer.csv"));
 //
-//        DefaultLineMapper<Member> lineMapper = new DefaultLineMapper<>();
+//        DefaultLineMapper<MemberEntity> lineMapper = new DefaultLineMapper<>();
 //        lineMapper.setTokenizer(new DelimitedLineTokenizer());
 //        lineMapper.setFieldSetMapper(new CustomerFieldSetMapper());
 //
@@ -82,7 +82,7 @@ public class FlatFilesConfiguration {
                 .name("flatFile")
                 .resource(new ClassPathResource("customer.csv"))
                 .fieldSetMapper(new CustomerFieldSetMapper())
-                //.targetType(Member.class)
+                //.targetType(MemberEntity.class)
                 .linesToSkip(1)
                 .delimited()
                 .delimiter(",")

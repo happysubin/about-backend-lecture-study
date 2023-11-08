@@ -1,6 +1,6 @@
 package io.springbatch.springbatchlecture.part8_itemreader.jpa.paging;
 
-import io.springbatch.springbatchlecture.part8_itemreader.jpa.Member;
+import io.springbatch.springbatchlecture.part8_itemreader.jpa.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -37,27 +37,27 @@ public class JpaPagingConfiguration {
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
-                .<Member, Member>chunk(chunkSize)
+                .<MemberEntity, MemberEntity>chunk(chunkSize)
                 .reader(customerItemReader())
                 .writer(customItemWriter())
                 .build();
     }
 
     @Bean
-    public ItemReader<? extends Member> customerItemReader() {
-        return new JpaPagingItemReaderBuilder<Member>()
+    public ItemReader<? extends MemberEntity> customerItemReader() {
+        return new JpaPagingItemReaderBuilder<MemberEntity>()
                 .name("jpaPagingItemReader")
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(chunkSize)
-                .queryString("select m from Member m order by id")
+                .queryString("select m from MemberEntity m order by id")
                 .build();
 
     }
 
     @Bean
-    public ItemWriter<Member> customItemWriter() {
+    public ItemWriter<MemberEntity> customItemWriter() {
         return members -> {
-            for (Member member : members) {
+            for (MemberEntity member : members) {
                 System.out.println("member = " + member);
             }
         };

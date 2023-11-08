@@ -1,10 +1,7 @@
 package io.springbatch.springbatchlecture.part8_itemreader.jpa;
 
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,7 +9,8 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class Member {
+@Table(name = "member2")
+public class MemberEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,4 +30,14 @@ public class Member {
 
     private String thumbnailImg;
 
+    @Builder
+    public MemberEntity(Long id, String name, Auth auth, String role, AuthProvider authProvider, String profileImg, String thumbnailImg) {
+        this.id = id;
+        this.name = name;
+        this.auth = auth;
+        this.role = role;
+        this.authProvider = authProvider;
+        this.profileImg = profileImg;
+        this.thumbnailImg = thumbnailImg;
+    }
 }

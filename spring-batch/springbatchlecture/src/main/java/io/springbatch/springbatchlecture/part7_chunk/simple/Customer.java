@@ -13,7 +13,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Member{" +
+        return "MemberEntity{" +
                 "name='" + name + '\'' +
                 '}';
     }

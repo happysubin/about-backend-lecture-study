@@ -1,7 +1,7 @@
 package io.springbatch.springbatchlecture.part8_itemreader.jpa.cursor;
 
 
-import io.springbatch.springbatchlecture.part8_itemreader.jpa.Member;
+import io.springbatch.springbatchlecture.part8_itemreader.jpa.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -35,7 +35,7 @@ public class JpaCursorConfiguration {
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
-                .<Member, Member>chunk(chunkSize)
+                .<MemberEntity, MemberEntity>chunk(chunkSize)
                 .reader(customerItemReader())
                 .writer(customItemWriter())
                 .build();
@@ -43,11 +43,11 @@ public class JpaCursorConfiguration {
 
 
     @Bean
-    public ItemReader<? extends Member> customerItemReader() {
-        return new JpaCursorItemReaderBuilder<Member>()
+    public ItemReader<? extends MemberEntity> customerItemReader() {
+        return new JpaCursorItemReaderBuilder<MemberEntity>()
                 .name("jpaCursorItemReaer")
                 .entityManagerFactory(entityManagerFactory)
-                .queryString("select m from Member m order by id")
+                .queryString("select m from MemberEntity m order by id")
                 //.parameterValues()
                 //.maxItemCount(chunkSize)
                 //.currentItemCount(2)
@@ -55,9 +55,9 @@ public class JpaCursorConfiguration {
     }
 
     @Bean
-    public ItemWriter<Member> customItemWriter() {
+    public ItemWriter<MemberEntity> customItemWriter() {
         return members -> {
-            for (Member member : members) {
+            for (MemberEntity member : members) {
                 System.out.println("member = " + member);
             }
         };
