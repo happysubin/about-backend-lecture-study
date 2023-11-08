@@ -29,4 +29,20 @@ public class Member {
     private String status;
     private String updatedAt;
 
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", authProvider='" + authProvider + '\'' +
+                ", profileImg='" + profileImg + '\'' +
+                ", thumbnailImg='" + thumbnailImg + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", status='" + status + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                '}';
+    }
 }
