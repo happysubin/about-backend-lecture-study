@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
-@ComponentScan("io.springbatch.springbatchlecture.part9_itemwriter.adapter")
+@ComponentScan("io.springbatch.springbatchlecture.part10_itemprocessor")
 @EnableBatchProcessing
 @SpringBootApplication
 public class SpringBatchLectureApplication {
