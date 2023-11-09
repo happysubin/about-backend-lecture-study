@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
-@ComponentScan("io.springbatch.springbatchlecture.part10_itemprocessor")
+@ComponentScan("io.springbatch.springbatchlecture.part11_repeat_errorcontrol")
 @EnableBatchProcessing
 @SpringBootApplication
 public class SpringBatchLectureApplication {
