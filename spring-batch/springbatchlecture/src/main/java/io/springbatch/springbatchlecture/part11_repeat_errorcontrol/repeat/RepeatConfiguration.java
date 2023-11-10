@@ -1,4 +1,4 @@
-package io.springbatch.springbatchlecture.part11_repeat_errorcontrol;
+package io.springbatch.springbatchlecture.part11_repeat_errorcontrol.repeat;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
