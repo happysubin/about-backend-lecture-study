@@ -1,4 +1,4 @@
-package io.springbatch.springbatchlecture.part11_repeat_errorcontrol.retry;
+package io.springbatch.springbatchlecture.part11_repeat_errorcontrol.retry.api;
 
 import org.springframework.batch.item.ItemWriter;
 

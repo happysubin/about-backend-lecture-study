@@ -1,5 +1,6 @@
-package io.springbatch.springbatchlecture.part11_repeat_errorcontrol.retry;
+package io.springbatch.springbatchlecture.part11_repeat_errorcontrol.retry.api;
 
+import io.springbatch.springbatchlecture.part11_repeat_errorcontrol.retry.NoRetryException;
 import org.springframework.batch.item.ItemProcessor;
 
 public class RetryItemProcessor implements ItemProcessor<String, String> {

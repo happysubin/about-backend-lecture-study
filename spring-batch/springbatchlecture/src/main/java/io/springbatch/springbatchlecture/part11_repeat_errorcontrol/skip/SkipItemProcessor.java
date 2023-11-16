@@ -1,5 +1,6 @@
 package io.springbatch.springbatchlecture.part11_repeat_errorcontrol.skip;
 
+import io.springbatch.springbatchlecture.part11_repeat_errorcontrol.skip.SkippableException;
 import org.springframework.batch.item.ItemProcessor;
 
 public class SkipItemProcessor implements ItemProcessor<String, String> {

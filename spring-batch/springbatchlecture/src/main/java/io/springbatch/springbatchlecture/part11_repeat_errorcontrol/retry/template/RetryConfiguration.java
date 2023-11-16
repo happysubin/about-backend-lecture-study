@@ -1,5 +1,7 @@
-package io.springbatch.springbatchlecture.part11_repeat_errorcontrol.retry;
+package io.springbatch.springbatchlecture.part11_repeat_errorcontrol.retry.template;
 
+
+import io.springbatch.springbatchlecture.part11_repeat_errorcontrol.retry.RetryableException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -12,6 +14,7 @@ import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.policy.SimpleRetryPolicy;
+import org.springframework.retry.support.RetryTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +30,7 @@ public class RetryConfiguration {
 
     @Bean
     public Job job() throws Exception {
-        return jobBuilderFactory.get("batchJob1")
+        return jobBuilderFactory.get("batchJob3")
                 .incrementer(new RunIdIncrementer())
                 .start(step1())
                 .build();
@@ -35,30 +38,17 @@ public class RetryConfiguration {
 
     @Bean
     public Step step1() throws Exception {
-        return stepBuilderFactory.get("step1")
-                .<String, String>chunk(5)
+        return stepBuilderFactory.get("ste1p1")
+                .<String, Customer>chunk(5)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer())
                 .faultTolerant()
 //                .skip(RetryableException.class)
 //                .skipLimit(2)
-                //.retry(RetryableException.class)
-                //.noRetry(NoRetryException.class)
-                //.retryLimit(2)
-                .retryPolicy(limitCheckingItemSkipPolicy())
+//                .retryLimit(2)
+//                .retry(RetryableException.class)
                 .build();
-    }
-
-    @Bean
-    public SimpleRetryPolicy limitCheckingItemSkipPolicy() {
-
-        Map<Class<? extends Throwable>, Boolean> exceptionClass = new HashMap<>();
-        exceptionClass.put(RetryableException.class, true);
-
-        SimpleRetryPolicy simpleRetryPolicy = new SimpleRetryPolicy(2, exceptionClass);
-
-        return simpleRetryPolicy;
     }
 
     @Bean
@@ -73,16 +63,32 @@ public class RetryConfiguration {
         return new ListItemReader<>(items);
     }
 
-
     @Bean
     public ItemProcessor processor() {
-        RetryItemProcessor processor = new RetryItemProcessor();
+        RetryItemProcessor2 processor = new RetryItemProcessor2();
         return processor;
     }
 
     @Bean
     public ItemWriter writer() {
-        RetryItemWriter writer = new RetryItemWriter();
+        RetryItemWriter2 writer = new RetryItemWriter2();
         return writer;
+    }
+
+    @Bean
+    public RetryTemplate retryTemplate() {
+
+        Map<Class<? extends Throwable>, Boolean> exceptionClass = new HashMap<>();
+        exceptionClass.put(RetryableException.class, true);
+
+//        FixedBackOffPolicy backOffPolicy = new FixedBackOffPolicy();
+//        backOffPolicy.setBackOffPeriod(2000); //지정한 시간만큼 대기후 재시도 한다.
+
+        SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy(2,exceptionClass);
+        RetryTemplate retryTemplate = new RetryTemplate();
+//        retryTemplate.setBackOffPolicy(backOffPolicy);
+        retryTemplate.setRetryPolicy(retryPolicy);
+
+        return retryTemplate;
     }
 }
