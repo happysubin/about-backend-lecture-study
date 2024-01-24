@@ -2,6 +2,7 @@ package com.group.libraryapp.domain.user;
 
 import com.group.libraryapp.domain.book.Book;
 import com.group.libraryapp.domain.user.loanhistory.UserLoanHistory;
+import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -52,10 +53,13 @@ public class User {
     targetHistory.doReturn();
   }
 
+  @Nullable
   public String getName() {
     return name;
   }
 
+  //코틀린이 null이 들어와도 되는 객체인지를 판단해주기 위해서 애노테이션을 붙임
+  @Nullable
   public Integer getAge() {
     return age;
   }
