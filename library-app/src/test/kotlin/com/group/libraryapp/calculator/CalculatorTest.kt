@@ -54,6 +54,9 @@ class CalculatorTest {
         try {
             calculator.divide(0)
         } catch(e: IllegalArgumentException) {
+            if(e.message != "0으로 나눌 수 없습니다") {
+                throw IllegalStateException("메시지가 다릅니다.")
+            }
             return
         } catch(e: Exception) {
             throw IllegalStateException()
