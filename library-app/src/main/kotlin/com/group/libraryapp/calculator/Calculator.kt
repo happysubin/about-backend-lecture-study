@@ -4,7 +4,7 @@ class Calculator(
     private var _number: Int
 ) {
 
-    //Backing
+    //Backing properties
     val number: Int
         get() = this._number
 
