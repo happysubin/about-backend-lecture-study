@@ -1,6 +1,6 @@
 package com.group.libraryapp.service.user
 
-import com.group.libraryapp.domain.book.Book
+import com.group.libraryapp.domain.Book
 import com.group.libraryapp.domain.book.BookRepository
 import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
@@ -10,7 +10,6 @@ import com.group.libraryapp.dto.book.request.BookLoanRequest
 import com.group.libraryapp.dto.book.request.BookRequest
 import com.group.libraryapp.dto.book.request.BookReturnRequest
 import com.group.libraryapp.service.book.BookService
-import org.aspectj.lang.annotation.AfterReturning
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
@@ -54,7 +53,7 @@ class BookServiceTest @Autowired constructor(
     @DisplayName("책 대출이 정상 동작한다")
     fun loanBookTest() {
         // given
-        bookRepository.save(Book("이상한 나라의 엘리스"))
+        bookRepository.save(Book("이상한 나라의 엘리스", null))
         val savedUser = userRepository.save(User("최태현", null))
         val request = BookLoanRequest("최태현", "이상한 나라의 엘리스")
 
