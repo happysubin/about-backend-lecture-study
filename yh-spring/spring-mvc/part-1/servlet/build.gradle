@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.2'
+	id 'org.springframework.boot' version '2.7.11'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id 'war'
@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -35,3 +35,7 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+//https://stackoverflow.com/questions/76188050/how-to-fix-gradle-build-failed-due-to-void-org-gradle-api-internal-artifacts-dsl
+
+//스프링부트 2.6.x는 이제 Gradle 8.x를 지원하지 않음
