@@ -35,7 +35,7 @@ public class FrontControllerServletV5 extends HttpServlet {
 
     private void initHandlerAdapters() {
         handlerAdapters.add(new ControllerV3HandlerAdapter());
-        handlerAdapters.add(new ControllerV4HandlerAdapter()); //V4 추가
+        handlerAdapters.add (new ControllerV4HandlerAdapter()); //V4 추가
     }
 
     private void initHandlerMappingMap() {
