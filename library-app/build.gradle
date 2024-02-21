@@ -6,6 +6,7 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.6.21'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.6.21'
 
+
 }
 
 group = 'com.group'
@@ -23,6 +24,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.21' //코틀린에서 리플렉션 사
+
+    //jackson이 코틀린 코드를 이해못할  수 있어서 아래 의존성 추가
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3'
 }
 
 tasks.named('test') {
