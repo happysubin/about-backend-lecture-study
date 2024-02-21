@@ -1,6 +1,6 @@
 package com.group.libraryapp.service.user
 
-import com.group.libraryapp.domain.Book
+import com.group.libraryapp.domain.book.Book
 import com.group.libraryapp.domain.book.BookRepository
 import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
@@ -54,7 +54,7 @@ class BookServiceTest @Autowired constructor(
     fun loanBookTest() {
         // given
         bookRepository.save(Book("이상한 나라의 엘리스", null))
-        val savedUser = userRepository.save(User("최태현", null))
+        val savedUser = userRepository.save(User("최태현", 33))
         val request = BookLoanRequest("최태현", "이상한 나라의 엘리스")
 
         // when
