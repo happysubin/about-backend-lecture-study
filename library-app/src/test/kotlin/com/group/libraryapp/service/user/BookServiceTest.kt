@@ -105,4 +105,41 @@ class BookServiceTest @Autowired constructor(
         assertThat(results).hasSize(1)
         assertThat(results[0].status).isEqualTo(UserLoanStatus.RETURNED)
     }
+
+    @Test
+    @DisplayName("책 대여 권수를 정상 확인한다")
+    fun countLoanedBookTest() {
+        val savedUser = userRepository.save(User("ahn", null))
+        userLoanHistoryRepository.saveAll(listOf(
+            UserLoanHistory.fixture(savedUser, "A"),
+            UserLoanHistory.fixture(savedUser, "B", UserLoanStatus.RETURNED),
+            UserLoanHistory.fixture(savedUser, "C", UserLoanStatus.RETURNED),
+
+        ))
+
+        val result = bookService.countLoanedBook()
+
+        assertThat(result).isEqualTo(1)
+    }
+
+    @Test
+    @DisplayName("분야별 책 권수를 정상 확인한다.")
+    fun getBookStatisticsTest() {
+        bookRepository.saveAll(listOf(
+            Book.fixture("A", BookType.COMPUTER),
+            Book.fixture("B", BookType.COMPUTER),
+            Book.fixture("C", BookType.SCIENCE),
+            ))
+
+        val results = bookService.getBookStatistics()
+
+        assertThat(results).hasSize(2)
+        val computerDto = results.first{ result -> result.type == BookType.COMPUTER}
+        assertThat(computerDto.count).isEqualTo(2)
+
+        val scienceDto = results.first{ result -> result.type == BookType.SCIENCE}
+        assertThat(scienceDto.count).isEqualTo(1)
+
+
+    }
 }
