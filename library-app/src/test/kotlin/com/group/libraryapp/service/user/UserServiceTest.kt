@@ -90,7 +90,6 @@ class UserServiceTest @Autowired constructor(
         assertThat(results).hasSize(1)
         assertThat((results[0].name)).isEqualTo("A")
         assertThat((results[0].books)).isEmpty()
-
     }
 
     @Test
@@ -116,6 +115,7 @@ class UserServiceTest @Autowired constructor(
 
     @AfterEach
     fun afterEach() {
+        println("클린 시작")
         userRepository.deleteAll()
     }
 }
