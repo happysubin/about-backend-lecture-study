@@ -5,6 +5,8 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.21'
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.6.21'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.6.21'
+    //Kotlin Annotation Processing을 위한 플러그인을 프로젝트에 추가
+    id "org.jetbrains.kotlin.kapt" version "1.6.21"
 
 
 }
@@ -27,6 +29,10 @@ dependencies {
 
     //jackson이 코틀린 코드를 이해못할  수 있어서 아래 의존성 추가
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3'
+
+    implementation("com.querydsl:querydsl-jpa:5.0.0")
+    kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
 }
 
 tasks.named('test') {
