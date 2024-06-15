@@ -50,7 +50,8 @@ public class ProxyFactoryTest {
     void proxyTargetClass() {
         ServiceInterface target = new ServiceImpl();
         ProxyFactory proxyFactory = new ProxyFactory(target);
-        proxyFactory.setProxyTargetClass(true); //중요 proxyFactory.addAdvice(new TimeAdvice());
+        proxyFactory.setProxyTargetClass(true); //중요. 구체 클래스 기반 프록시 적용
+        proxyFactory.addAdvice(new TimeAdvice());
         ServiceInterface proxy = (ServiceInterface) proxyFactory.getProxy();
         log.info("targetClass={}", target.getClass());
         log.info("proxyClass={}", proxy.getClass());

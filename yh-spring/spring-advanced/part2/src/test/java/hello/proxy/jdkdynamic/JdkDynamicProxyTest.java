@@ -16,7 +16,7 @@ public class JdkDynamicProxyTest {
 
         //프록시 객체를 생성
         AInterface proxy = (AInterface) Proxy.newProxyInstance(AInterface.class.getClassLoader(), new Class[]{AInterface.class}, handler);
-        proxy.calls();
+        proxy.calls2();
         log.info("targetClass={}", target.getClass());
         log.info("proxyClass={}", proxy.getClass());
     }
