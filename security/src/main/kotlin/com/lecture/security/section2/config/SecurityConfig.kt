@@ -2,23 +2,21 @@ package com.lecture.security.section2.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.Customizer
+import org.springframework.http.HttpStatus
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
+import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.AuthenticationFailureHandler
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler
-
 
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
 class SecurityConfig {
 
-    @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+//    @Bean
+    fun securityFilterChainFormLogin(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests { auth -> auth.requestMatchers("/error").permitAll().anyRequest().authenticated() }
             .formLogin { httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
@@ -38,6 +36,21 @@ class SecurityConfig {
                 }
                 .permitAll() //// failureUrl(), loginPage(), loginProcessingUrl() 에 대한 URL 에 모든 사용자의 접근을 허용 함
             }
+
+        return http.build()
+    }
+
+    @Bean
+    fun securityFilterChainHttpBasic(http: HttpSecurity): SecurityFilterChain {
+        http
+            .authorizeHttpRequests { auth -> auth.anyRequest().authenticated() }
+            .httpBasic {httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer
+            .realmName("securty")
+            .authenticationEntryPoint{ request, response, authException ->
+                response.addHeader("WWW-Authenticate", "Basic realm=localhost");
+                response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            }
+        }
 
         return http.build()
     }
