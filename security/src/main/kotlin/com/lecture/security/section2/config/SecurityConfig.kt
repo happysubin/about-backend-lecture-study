@@ -3,16 +3,19 @@ package com.lecture.security.section2.config
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
-import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 
 @EnableWebSecurity
-@Configuration(proxyBeanMethods = false)
+//@Configuration(proxyBeanMethods = false)
+@Configuration
 class SecurityConfig {
 
 //    @Bean
@@ -40,7 +43,7 @@ class SecurityConfig {
         return http.build()
     }
 
-    @Bean
+//    @Bean
     fun securityFilterChainHttpBasic(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests { auth -> auth.anyRequest().authenticated() }
@@ -56,7 +59,25 @@ class SecurityConfig {
     }
 
     @Bean
-    fun inMemoryUserDetailsManager(): InMemoryUserDetailsManager {
+    fun securityFilterChainRememberMe(http: HttpSecurity): SecurityFilterChain {
+        http
+            .authorizeHttpRequests { auth -> auth.anyRequest().authenticated() }
+            .formLogin { Customizer.withDefaults<FormLoginConfigurer<HttpSecurity>>()  }
+            .rememberMe { httpSecurityRememberMeConfigurer ->
+                httpSecurityRememberMeConfigurer
+                    .alwaysRemember(true)
+                    .tokenValiditySeconds(3600)
+                    .userDetailsService(inMemoryUserDetailsManager())
+                    .rememberMeParameter("remember") /// 로그인 시 사용자를 기억하기 위해 사용되는 HTTP 매개변수이며 기본값은 'remember-me' 이다
+                    .rememberMeCookieName("remember") //// 기억하기(remember-me) 인증을 위한 토큰을 저장하는 쿠키 이름이며 기본값은 'remember-me' 이다
+                    .key("security")
+            }
+
+        return http.build()
+    }
+
+    @Bean
+    fun inMemoryUserDetailsManager(): UserDetailsService {
         val user: UserDetails = User
             .withUsername("root")
             .password("{noop}1234")
