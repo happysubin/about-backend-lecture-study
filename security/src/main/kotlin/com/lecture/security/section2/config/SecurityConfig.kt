@@ -58,7 +58,7 @@ class SecurityConfig {
         return http.build()
     }
 
-    @Bean
+//    @Bean
     fun securityFilterChainRememberMe(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests { auth -> auth.anyRequest().authenticated() }
@@ -75,6 +75,27 @@ class SecurityConfig {
 
         return http.build()
     }
+
+    @Bean
+    fun securityFilterChainAnonymous(http: HttpSecurity): SecurityFilterChain {
+        http
+            .authorizeHttpRequests { auth -> auth
+                .requestMatchers("/anonymous").hasRole("GUEST")
+                .requestMatchers("/anonymousContext", "/authentication").permitAll()
+                .anyRequest()
+                .authenticated()
+
+            }
+            .formLogin { Customizer.withDefaults<FormLoginConfigurer<HttpSecurity>>()  }
+            .anonymous { httpSecurityAnonymous ->
+                httpSecurityAnonymous
+                    .principal("guest")
+                    .authorities("ROLE_GUEST")
+            }
+
+        return http.build()
+    }
+
 
     @Bean
     fun inMemoryUserDetailsManager(): UserDetailsService {
