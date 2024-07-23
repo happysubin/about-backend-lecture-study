@@ -1,5 +1,7 @@
 package com.lecture.security.section2.config
 
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
@@ -7,11 +9,16 @@ import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.logout.LogoutHandler
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @EnableWebSecurity
 //@Configuration(proxyBeanMethods = false)
@@ -76,7 +83,7 @@ class SecurityConfig {
         return http.build()
     }
 
-    @Bean
+//    @Bean
     fun securityFilterChainAnonymous(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests { auth -> auth
@@ -91,6 +98,46 @@ class SecurityConfig {
                 httpSecurityAnonymous
                     .principal("guest")
                     .authorities("ROLE_GUEST")
+            }
+
+        return http.build()
+    }
+
+    @Bean
+    fun securityFilterChainLogout(http: HttpSecurity): SecurityFilterChain {
+        http
+            .authorizeHttpRequests { auth -> auth
+                .requestMatchers("/logoutSuccess").permitAll()
+                .anyRequest()
+                .authenticated()
+            }
+            .formLogin { Customizer.withDefaults<FormLoginConfigurer<HttpSecurity>>()  }
+//            .csrf{ csrf -> csrf.disable() }
+            .logout() { httpSecurityLogout ->
+                httpSecurityLogout
+                    .logoutUrl("/logoutProc")
+//                    .logoutRequestMatcher(AntPathRequestMatcher("/logoutProc", "POST"))
+                    .logoutRequestMatcher(AntPathRequestMatcher("/logoutProc"))// / 로그아웃이 발생하는 RequestMatcher 을 지정한다. logoutUrl 보다 우선적
+                    .logoutSuccessUrl("/logoutSuccess")
+                    .logoutSuccessHandler(object: LogoutSuccessHandler {
+                        override fun onLogoutSuccess(
+                            request: HttpServletRequest?,
+                            response: HttpServletResponse?,
+                            authentication: Authentication?
+                        ) {
+                            response?.sendRedirect("/logoutSuccess")
+                        }
+                    })
+                    .deleteCookies("JSESSIONID", "remember-me")
+                    .invalidateHttpSession(true) //HttpSession을 무효화해야 하는 경우 true (기본값), 그렇지 않으면 false
+                    .clearAuthentication(true) // 로그아웃 시 SecurityContextLogoutHandler가 인증(Authentication)을 삭제 해야 하는지 여부를 명시
+                    .addLogoutHandler { request, response, authentication ->
+                        val session = request.session
+                        session.invalidate()
+                        SecurityContextHolder.getContextHolderStrategy().context.authentication = null
+                        SecurityContextHolder.getContextHolderStrategy().clearContext()
+                    }  //// 기존의 로그아웃 핸들러 뒤에 새로운 LogoutHandler를 추가
+                    .permitAll()
             }
 
         return http.build()

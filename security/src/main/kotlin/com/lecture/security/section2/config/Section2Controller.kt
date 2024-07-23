@@ -46,4 +46,9 @@ class Section2Controller {
     fun anonymousContext(@CurrentSecurityContext context: SecurityContext): String {
         return context.authentication.name
     }
+
+    @GetMapping("/logoutSuccess")
+    fun logoutSuccess(): String {
+        return "logoutSuccess"
+    }
 }
