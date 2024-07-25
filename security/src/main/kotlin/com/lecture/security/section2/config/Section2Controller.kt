@@ -11,10 +11,15 @@ import org.springframework.web.bind.annotation.RestController
 @RestController("/login")
 class Section2Controller {
 
-    @GetMapping
-    fun index(): String {
-        return "index"
+    @GetMapping("/")
+    fun index(customParam: String?): String {
+        return if (customParam == null) {
+            "index"
+        } else {
+            "customPage"
+        }
     }
+
 
     @GetMapping("/home")
     fun home(): String {

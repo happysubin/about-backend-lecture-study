@@ -16,8 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.logout.LogoutHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @EnableWebSecurity
@@ -103,7 +103,7 @@ class SecurityConfig {
         return http.build()
     }
 
-    @Bean
+//    @Bean
     fun securityFilterChainLogout(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests { auth -> auth
@@ -139,6 +139,27 @@ class SecurityConfig {
                     }  //// 기존의 로그아웃 핸들러 뒤에 새로운 LogoutHandler를 추가
                     .permitAll()
             }
+
+        return http.build()
+    }
+
+    @Bean
+    fun securityFilterChainSavedRequestAndRequestCache(http: HttpSecurity): SecurityFilterChain {
+        val requestCache = HttpSessionRequestCache()
+        //요청 Url 에 customParam=y 라는 이름의 매개 변수가 있는 경우에만 HttpSession 에 저장된 SavedRequest 을 꺼내오도록 설정할 수 있다 (기본값은 "continue")
+        //이게 필요한 이유는 특정한 상황에만 적용하기 위해.
+        requestCache.setMatchingRequestParameterName("customParam=y")  // 요청이 성공하면 쿼리스트링으로 뒤에 이게 붙음.
+
+        http
+            .authorizeHttpRequests { auth -> auth.anyRequest().authenticated() }
+            .formLogin { formLogin -> formLogin
+                .successHandler { request, response, authentication ->
+                    val savedRequest = requestCache.getRequest(request, response)
+                    val redirectUrl = savedRequest.redirectUrl
+                    response.sendRedirect(redirectUrl)
+                 }
+            }
+            .requestCache {cache -> cache.requestCache(requestCache)}
 
         return http.build()
     }
