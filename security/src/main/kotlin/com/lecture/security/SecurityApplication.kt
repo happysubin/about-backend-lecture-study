@@ -5,7 +5,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication
-@ComponentScan(basePackages = ["com.lecture.security.section2.config"])
+@ComponentScan(basePackages = ["com.lecture.security.section03"])
 class SecurityApplication
 
 fun main(args: Array<String>) {

@@ -1,4 +1,4 @@
-package com.lecture.security.section2.config
+package com.lecture.security.section02.config
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

@@ -1,4 +1,4 @@
-package com.lecture.security.section2.config
+package com.lecture.security.section02.config
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken
 import org.springframework.security.core.Authentication
