@@ -5,9 +5,10 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer.AuthorizationManagerRequestMatcherRegistry
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer
 import org.springframework.security.config.annotation.web.configurers.SecurityContextConfigurer
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -22,8 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfig {
 
 
-    @Bean
-    @Throws(Exception::class)
+//    @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
 
         val authenticationManagerBuilder = http.getSharedObject(
@@ -49,11 +49,32 @@ class SecurityConfig {
         return http.build()
     }
 
+
+    @Bean
+    fun securityFilterChainMvcLogin(http: HttpSecurity): SecurityFilterChain {
+
+        http
+            .authorizeHttpRequests { auth -> auth
+                .requestMatchers("/login").permitAll()
+                .anyRequest().authenticated()
+            }
+//            .formLogin(Customizer.withDefaults()) 폼로그인 사용 안함
+            .csrf { obj: AbstractHttpConfigurer<*, *> -> obj.disable() }
+
+        return http.build()
+    }
+
     fun customFilter(http: HttpSecurity, authenticationManager: AuthenticationManager): CustomAuthenticationFilter {
         val customAuthenticationFilter = CustomAuthenticationFilter(http)
         customAuthenticationFilter.setAuthenticationManager(authenticationManager)
         return customAuthenticationFilter
     }
+
+    @Bean
+    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
+        return authenticationConfiguration.authenticationManager
+    }
+
 
 
     @Bean
