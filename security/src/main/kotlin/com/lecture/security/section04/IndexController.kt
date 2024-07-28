@@ -1,4 +1,4 @@
-package com.lecture.security.section03
+package com.lecture.security.section04
 
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.GetMapping

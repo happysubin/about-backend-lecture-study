@@ -1,4 +1,4 @@
-package com.lecture.security.section03
+package com.lecture.security.section04
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -74,6 +74,15 @@ class SecurityConfig {
     fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
         return authenticationConfiguration.authenticationManager
     }
+
+//    @Bean
+//    fun authenticationManager(builder: AuthenticationManagerBuilder): AuthenticationManager {
+//        println(builder)
+//        println("hihihih")
+//        builder.authenticationProvider(DaoAuthenticationProvider())
+//        builder!!.build()
+//        return builder.`object`
+//    }
 
 
 
