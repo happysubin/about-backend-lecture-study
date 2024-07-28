@@ -28,11 +28,14 @@ class SecurityConfig {
 
     http.sessionManagement { session ->
         session
+            .sessionFixation {session.sessionFixation().changeSessionId()} //이게 젤 가성비 굿
             .invalidSessionUrl("/invalidSessionUrl") // 이미 만료된 세션으로 요청을 하는 사용자를 특정 엔드포인트로 리다이렉션 할 Url 을 지정
             .maximumSessions(1) // 사용자당 최대 세션 수를 제어한다. 기본값은 무제한 세션을 허용한다. 이게 젤 중요!
             .maxSessionsPreventsLogin(false) // true 이면 최대 세션 수 (maximumSessions(int))에 도달했을 때 사용자의 인증을 방지한다
                                             // false(기본 설정)이면 인증하는 사용자에게 접근을 허용하고 기존 사용자의 세션은 만료된다
             .expiredUrl("/expired") // 세션을 만료하고 나서 리다이렉션 할 URL 을 지정한다
+
+        //세션 보호
     }
 
         //사용자 세션 강제 만료에서 invalidSessionUrl과 expiredUrl이 관련있다.
