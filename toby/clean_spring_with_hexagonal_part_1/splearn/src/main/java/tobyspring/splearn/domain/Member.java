@@ -19,15 +19,19 @@ public class Member {
 
     private MemberStatus status;
 
-    private Member(String email, String nickname, String passwordHash) {
-        this.email = Objects.requireNonNull(email);
-        this.nickname = Objects.requireNonNull(nickname);
-        this.passwordHash = Objects.requireNonNull(passwordHash);
-        this.status = MemberStatus.PENDING;
+    private Member() {
     }
 
-    public static Member create(String email, String nickname, String password, PasswordEncoder encoder) {
-        return new Member(email, nickname, encoder.encode(password));
+    public static Member create(MemberCreateRequest createRequest, PasswordEncoder encoder) {
+        Member member = new Member();
+
+        member.email = Objects.requireNonNull(createRequest.email());
+        member.nickname = Objects.requireNonNull(createRequest.nickname());
+        member.passwordHash = Objects.requireNonNull(encoder.encode(createRequest.email()));
+
+        member.status = MemberStatus.PENDING;
+
+        return member;
     }
 
     public void activate() {
@@ -47,10 +51,14 @@ public class Member {
     }
 
     public void changeNickname(String nickname) {
-        this.nickname = nickname;
+        this.nickname = Objects.requireNonNull(nickname);
     }
 
     public void changePassword(String password, PasswordEncoder encoder) {
-        this.passwordHash = encoder.encode(password);
+        this.passwordHash = encoder.encode(Objects.requireNonNull(password));
+    }
+
+    public boolean isActive() {
+        return this.status == MemberStatus.ACTIVE;
     }
 }
