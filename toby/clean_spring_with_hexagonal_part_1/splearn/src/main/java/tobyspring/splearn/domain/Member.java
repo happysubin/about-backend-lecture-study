@@ -19,6 +19,7 @@ public class Member {
 
     private MemberStatus status;
 
+
     public Member(String email, String nickname, String password) {
         this.email = Objects.requireNonNull(email);
         this.nickname = Objects.requireNonNull(nickname);
