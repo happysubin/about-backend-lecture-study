@@ -3,6 +3,8 @@ package tobyspring.splearn.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
 
 import java.util.Objects;
 
@@ -11,6 +13,7 @@ import static org.springframework.util.Assert.*;
 @Entity
 @Getter
 @ToString
+@NaturalIdCache // NaturalId 를 적용하면 비즈니스 키를 가지고 영속성 컨텍스트 캐시 사용
 public class Member {
 
     @Id
@@ -18,6 +21,7 @@ public class Member {
     private Long id;
 
     @Embedded
+    @NaturalId // 비즈니스 키 검증에 유용.
     private Email email;
 
     private String nickname;
