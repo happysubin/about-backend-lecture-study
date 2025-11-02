@@ -1,5 +1,6 @@
 package tobyspring.splearn.domain;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -7,27 +8,33 @@ import java.util.Objects;
 
 import static org.springframework.util.Assert.*;
 
+@Entity
 @Getter
 @ToString
 public class Member {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Embedded
     private Email email;
 
     private String nickname;
 
     private String passwordHash;
 
+    @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
-    private Member() {
-    }
+    protected Member() {}
 
-    public static Member create(MemberCreateRequest createRequest, PasswordEncoder encoder) {
+    public static Member register(MemberRegisterRequest registerRequest, PasswordEncoder encoder) {
         Member member = new Member();
 
-        member.email = new Email(createRequest.email());
-        member.nickname = Objects.requireNonNull(createRequest.nickname());
-        member.passwordHash = Objects.requireNonNull(encoder.encode(createRequest.password()));
+        member.email = new Email(registerRequest.email());
+        member.nickname = Objects.requireNonNull(registerRequest.nickname());
+        member.passwordHash = Objects.requireNonNull(encoder.encode(registerRequest.password()));
 
         member.status = MemberStatus.PENDING;
 
