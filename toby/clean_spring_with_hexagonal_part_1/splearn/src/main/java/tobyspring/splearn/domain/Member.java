@@ -15,16 +15,19 @@ public class Member {
 
     private String nickname;
 
-    private String password;
+    private String passwordHash;
 
     private MemberStatus status;
 
-
-    public Member(String email, String nickname, String password) {
+    private Member(String email, String nickname, String passwordHash) {
         this.email = Objects.requireNonNull(email);
         this.nickname = Objects.requireNonNull(nickname);
-        this.password = Objects.requireNonNull(password);
+        this.passwordHash = Objects.requireNonNull(passwordHash);
         this.status = MemberStatus.PENDING;
+    }
+
+    public static Member create(String email, String nickname, String password, PasswordEncoder encoder) {
+        return new Member(email, nickname, encoder.encode(password));
     }
 
     public void activate() {
@@ -37,5 +40,17 @@ public class Member {
         state(status == MemberStatus.ACTIVE, "ACTIVE 상태가 아닙니다.");
 
         this.status = MemberStatus.DEACTIVATED;
+    }
+
+    public boolean verifyPassword(String secret, PasswordEncoder encoder) {
+        return encoder.matches(secret, this.passwordHash);
+    }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void changePassword(String password, PasswordEncoder encoder) {
+        this.passwordHash = encoder.encode(password);
     }
 }
