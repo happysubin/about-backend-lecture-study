@@ -59,8 +59,8 @@ class MemberTest {
 
     @Test
     void verifyPassword() {
-        assertThat(member.verifyPassword("secret", encoder)).isTrue();
-        assertThat(member.verifyPassword("hello", encoder)).isFalse();
+        assertThat(member.verifyPassword("long___secret", encoder)).isTrue();
+        assertThat(member.verifyPassword("helloooooo", encoder)).isFalse();
     }
 
     @Test
