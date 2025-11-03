@@ -8,7 +8,7 @@ import org.hibernate.annotations.NaturalIdCache;
 
 import java.util.Objects;
 
-import static org.springframework.util.Assert.*;
+import static org.springframework.util.Assert.state;
 
 @Entity
 @Getter
