@@ -27,7 +27,7 @@ repositories {
 	mavenCentral()
 }
 
-val mockitoAgent: Configuration = configurations.create("mockitoAgent")
+//val mockitoAgent: Configuration = configurations.create("mockitoAgent")
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -46,5 +46,5 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-    jvmArgs("-javaagent:${mockitoAgent.asPath}")
+//    jvmArgs("-javaagent:${mockitoAgent.asPath}")
 }
