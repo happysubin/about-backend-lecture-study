@@ -12,10 +12,9 @@ import static org.springframework.util.Assert.state;
 
 @Entity
 @Getter
-@ToString
+@ToString(callSuper = true)
 @NaturalIdCache // NaturalId 를 적용하면 비즈니스 키를 가지고 영속성 컨텍스트 캐시 사용
 public class Member extends AbstractEntity {
-
     @NaturalId // 비즈니스 키 검증에 유용.
     private Email email;
 
