@@ -1,10 +1,9 @@
 package tobyspring.splearn.domain;
 
-import jakarta.persistence.Embeddable;
 
 import java.util.regex.Pattern;
 
-@Embeddable  // JPA 3.2 부터는 record에 Embeddable 사용 가능
+// @Embeddable  // JPA 3.2 부터는 record에 Embeddable 사용 가능
 public record Email(String address) {
 
     private static final Pattern EMAIL_PATTERN =  Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");

@@ -14,13 +14,8 @@ import static org.springframework.util.Assert.state;
 @Getter
 @ToString
 @NaturalIdCache // NaturalId 를 적용하면 비즈니스 키를 가지고 영속성 컨텍스트 캐시 사용
-public class Member {
+public class Member extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Embedded
     @NaturalId // 비즈니스 키 검증에 유용.
     private Email email;
 
@@ -28,7 +23,6 @@ public class Member {
 
     private String passwordHash;
 
-    @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
     protected Member() {}

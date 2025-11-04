@@ -1,5 +1,3 @@
-import org.gradle.api.artifacts.Configuration
-
 plugins {
 	java
 	id("org.springframework.boot") version "3.5.7"
@@ -42,6 +40,7 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.junit-pioneer:junit-pioneer:2.3.0")
     testImplementation("org.mockito:mockito-core:5.18.0")
+    implementation("org.springframework.security:spring-security-core")
 }
 
 tasks.withType<Test> {
