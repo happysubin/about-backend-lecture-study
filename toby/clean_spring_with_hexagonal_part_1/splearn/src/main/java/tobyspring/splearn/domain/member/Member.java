@@ -63,12 +63,10 @@ public class Member extends AbstractEntity {
     }
 
     public void updateInfo(MemberInfoUpdateRequest request) {
+        state(status == MemberStatus.ACTIVE, "등록 완료 상태가 아니면 정보 수정이 불가능합니다.");
+
         this.nickname = Objects.requireNonNull(request.nickname());
         this.detail.updateInfo(request);
-    }
-
-    public void changeNickname(String nickname) {
-        this.nickname = Objects.requireNonNull(nickname);
     }
 
     public void changePassword(String password, PasswordEncoder encoder) {

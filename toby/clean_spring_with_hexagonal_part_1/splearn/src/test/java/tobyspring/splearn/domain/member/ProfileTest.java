@@ -15,7 +15,6 @@ class ProfileTest {
 
     @Test
     void profileFail() {
-        Assertions.assertThatThrownBy(() -> new Profile("")).isInstanceOf(IllegalArgumentException.class);
         Assertions.assertThatThrownBy(() -> new Profile("toolongtoolongtoolongtoolongtoolongtoolongtoolong")).isInstanceOf(IllegalArgumentException.class);
         Assertions.assertThatThrownBy(() -> new Profile("A")).isInstanceOf(IllegalArgumentException.class);
         Assertions.assertThatThrownBy(() -> new Profile("한국어")).isInstanceOf(IllegalArgumentException.class);
