@@ -26,7 +26,6 @@ public class Member extends AbstractEntity {
 
     private MemberStatus status;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private MemberDetail detail;
 
     protected Member() {}

@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import tobyspring.splearn.domain.member.DuplicationEmailException;
-import tobyspring.splearn.domain.member.Member;
-import tobyspring.splearn.domain.member.MemberRegisterRequest;
-import tobyspring.splearn.domain.member.PasswordEncoder;
+import tobyspring.splearn.domain.member.*;
 import tobyspring.splearn.application.member.provided.MemberFinder;
 import tobyspring.splearn.application.member.provided.MemberRegister;
 import tobyspring.splearn.application.member.required.EmailSender;
@@ -45,6 +42,20 @@ public class MemberModifyService implements MemberRegister {
         return memberRepository.save(member);
     }
 
+    @Override
+    public Member deactivate(Long memberId) {
+        Member member = memberFinder.find(memberId);
+        member.deactivate();
+        return memberRepository.save(member);
+    }
+
+    @Override
+    public Member updateInfo(Long memberId, MemberInfoUpdateRequest memberInfoUpdateRequest) {
+        Member member = memberFinder.find(memberId);
+        member.updateInfo(memberInfoUpdateRequest);
+        return memberRepository.save(member);
+    }
+
     private void sendWelcomeEmail(Member member) {
         emailSender.send(member.getEmail(), "등록을 완료해주세요", "아래 링크를 클릭해서 등록을 완료해주세요");
     }
@@ -54,4 +65,7 @@ public class MemberModifyService implements MemberRegister {
             throw new DuplicationEmailException("이미 사용중인 이메일입니다: "+ registerRequest.email());
         }
     }
+
+
+
 }
