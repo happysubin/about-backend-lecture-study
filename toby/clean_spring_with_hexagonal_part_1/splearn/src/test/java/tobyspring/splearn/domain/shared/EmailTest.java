@@ -1,4 +1,4 @@
-package tobyspring.splearn.domain;
+package tobyspring.splearn.domain.shared;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
