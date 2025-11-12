@@ -45,6 +45,9 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
 
+
+    testImplementation("com.tngtech.archunit:archunit-junit5:1.4.1")
+
     compileOnly("org.projectlombok:lombok")
     testCompileOnly("org.projectlombok:lombok")
 
